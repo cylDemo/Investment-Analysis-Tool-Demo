@@ -1,0 +1,129 @@
+# Git 常用命令速查表
+# 项目路径: D:\Users\Desktop\Trae_demo\Investment_Analysis_Tool_Demo
+# Git 路径: D:\software\Git\cmd\git.exe
+
+================================================================================
+                              常用 Git 命令
+================================================================================
+
+## 1. 查看状态
+D:\software\Git\cmd\git.exe status
+
+## 2. 查看文件变更
+D:\software\Git\cmd\git.exe diff
+
+## 3. 添加文件到暂存区
+# 添加所有文件
+D:\software\Git\cmd\git.exe add .
+
+# 添加指定文件
+D:\software\Git\cmd\git.exe add 文件路径
+
+## 4. 提交更改
+D:\software\Git\cmd\git.exe commit -m "提交信息"
+
+## 5. 推送到 GitHub
+D:\software\Git\cmd\git.exe push
+
+## 6. 一键推送（全部操作）
+cd D:\Users\Desktop\Trae_demo\Investment_Analysis_Tool_Demo ; D:\software\Git\cmd\git.exe add . ; D:\software\Git\cmd\git.exe commit -m "更新" ; D:\software\Git\cmd\git.exe push
+
+================================================================================
+                              提交信息规范
+================================================================================
+
+feat:     新功能（feature）
+fix:      修复Bug
+docs:     文档更新
+style:    代码格式调整（不影响功能）
+refactor: 代码重构
+perf:     性能优化
+test:     添加测试
+chore:    构建过程或辅助工具的变动
+
+示例:
+  feat: 添加用户登录功能
+  fix: 修复登录验证错误
+  docs: 更新README文档
+
+================================================================================
+                              其他常用命令
+================================================================================
+
+## 查看提交历史
+D:\software\Git\cmd\git.exe log --oneline -10
+
+## 查看远程仓库地址
+D:\software\Git\cmd\git.exe remote -v
+
+## 拉取远程更新
+D:\software\Git\cmd\git.exe pull
+
+## 创建新分支
+D:\software\Git\cmd\git.exe branch 分支名
+
+## 切换分支
+D:\software\Git\cmd\git.exe checkout 分支名
+
+## 创建并切换到新分支
+D:\software\Git\cmd\git.exe checkout -b 分支名
+
+## 合并分支
+D:\software\Git\cmd\git.exe merge 分支名
+
+## 删除本地分支
+D:\software\Git\cmd\git.exe branch -d 分支名
+
+## 查看分支列表
+D:\software\Git\cmd\git.exe branch -a
+
+================================================================================
+                              问题解决
+================================================================================
+
+## 推送被拒绝（远程有更新）
+# 1. 先拉取远程更新
+D:\software\Git\cmd\git.exe pull
+
+# 2. 解决冲突后再次推送
+D:\software\Git\cmd\git.exe push
+
+## 撤销未暂存的修改
+D:\software\Git\cmd\git.exe checkout -- 文件名
+
+## 撤销已暂存的修改
+D:\software\Git\cmd\git.exe reset HEAD 文件名
+
+## 修改最后一次提交
+D:\software\Git\cmd\git.exe commit --amend -m "新的提交信息"
+
+## 查看指定文件的修改历史
+D:\software\Git\cmd\git.exe log -p 文件名
+
+================================================================================
+                              快捷脚本（可选）
+================================================================================
+
+## 创建一键推送脚本 push.bat
+## 将以下内容保存为 push.bat 文件，双击即可推送
+
+@echo off
+cd /d D:\Users\Desktop\Trae_demo\Investment_Analysis_Tool_Demo
+echo 正在添加文件...
+D:\software\Git\cmd\git.exe add .
+echo 正在提交...
+D:\software\Git\cmd\git.exe commit -m "update: %date% %time%"
+echo 正在推送...
+D:\software\Git\cmd\git.exe push
+echo 完成！
+pause
+
+================================================================================
+                              GitHub 仓库信息
+================================================================================
+
+仓库地址: https://github.com/cylDemo/Investment-Analysis-Tool-Demo
+用户名: cylDemo
+邮箱: yl18318350969@163.com
+
+================================================================================
