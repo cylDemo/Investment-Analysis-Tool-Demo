@@ -1,0 +1,2136 @@
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
+    'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue',
+    sans-serif;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  background-color: #f8fafc;
+  color: #1e293b;
+  transition: background-color 0.3s, color 0.3s;
+}
+
+/* 深色模式样式 */
+.app.dark-mode {
+  background-color: #0f172a;
+  color: #f1f5f9;
+}
+
+.app.dark-mode body {
+  background-color: #0f172a;
+  color: #f1f5f9;
+}
+
+.app {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+}
+
+.header {
+  background: linear-gradient(90deg, #B3E5FC 0%, #E0F7FA 100%);
+  color: #333333;
+  padding: 1.5rem;
+  text-align: center;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.header-content {
+  display: flex;
+  align-items: center;
+  max-width: 1200px;
+  margin: 0 auto;
+  width: 100%;
+  gap: 2rem;
+}
+
+.header-brand {
+  flex-shrink: 0;
+}
+
+.header-nav {
+  display: flex;
+  gap: 1rem;
+  margin-left: auto;
+  justify-content: flex-end;
+}
+
+.header-actions {
+  flex-shrink: 0;
+}
+
+.nav-tab {
+  padding: 0.75rem 1.5rem;
+  border: none;
+  background: none;
+  font-size: 1rem;
+  font-weight: 500;
+  color: #333333;
+  cursor: pointer;
+  border-radius: 24px;
+  transition: background-color 0.2s, color 0.2s;
+}
+
+.nav-tab:hover {
+  background-color: rgba(255, 255, 255, 0.2);
+  color: #1e3a8a;
+}
+
+.nav-tab.active {
+  background-color: rgba(255, 255, 255, 0.3);
+  color: #1e3a8a;
+  font-weight: 600;
+  border-radius: 24px;
+}
+
+.app.dark-mode .nav-tab {
+  color: #f1f5f9;
+}
+
+.app.dark-mode .nav-tab:hover {
+  background-color: rgba(255, 255, 255, 0.1);
+  color: #60a5fa;
+}
+
+.app.dark-mode .nav-tab.active {
+  background-color: rgba(255, 255, 255, 0.15);
+  color: #60a5fa;
+  border-radius: 24px;
+}
+
+.metal-selector-container {
+  margin-bottom: 2rem;
+  min-height: 120px; /* 固定最小高度，避免加载时抖动 */
+}
+
+/* 贵金属加载指示器样式 - 固定高度避免抖动 */
+.metal-loading-indicator {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  height: 60px; /* 固定高度 */
+  margin-top: 1rem;
+  color: #64748b;
+  font-size: 0.875rem;
+}
+
+.app.dark-mode .metal-loading-indicator {
+  color: #94a3b8;
+}
+
+.metal-loading-indicator .spinner.small {
+  width: 20px;
+  height: 20px;
+  border-width: 2px;
+  margin-bottom: 0;
+}
+
+.metal-selector-header {
+  margin-bottom: 1rem;
+}
+
+.metal-selector-header h3 {
+  font-size: 1.2rem;
+  font-weight: 600;
+  color: #333333;
+  margin: 0;
+}
+
+.app.dark-mode .metal-selector-header h3 {
+  color: #f1f5f9;
+}
+
+.metal-detail-container {
+  margin-top: 2rem;
+  padding: 2rem;
+  background: rgba(255, 255, 255, 0.1);
+  border-radius: 16px;
+  box-shadow: 0 4px 30px rgba(0, 0, 0, 0.1);
+  backdrop-filter: blur(5px);
+  -webkit-backdrop-filter: blur(5px);
+  border: 1px solid rgba(255, 255, 255, 0.3);
+  min-height: 500px; /* 固定最小高度，避免内容变化时抖动 */
+  transition: opacity 0.2s ease; /* 添加过渡动画 */
+}
+
+/* 贵金属详情占位区域 - 防止加载时抖动 */
+.metal-detail-placeholder {
+  width: 100%;
+  height: 100%;
+  min-height: 450px;
+}
+
+.placeholder-content {
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+}
+
+.placeholder-title {
+  height: 32px;
+  width: 60%;
+  background: linear-gradient(90deg, #e2e8f0 25%, #f1f5f9 50%, #e2e8f0 75%);
+  background-size: 200% 100%;
+  border-radius: 6px;
+  animation: shimmer 1.5s infinite;
+}
+
+.placeholder-info {
+  height: 48px;
+  width: 40%;
+  background: linear-gradient(90deg, #e2e8f0 25%, #f1f5f9 50%, #e2e8f0 75%);
+  background-size: 200% 100%;
+  border-radius: 6px;
+  animation: shimmer 1.5s infinite;
+}
+
+.placeholder-chart {
+  height: 320px;
+  width: 100%;
+  background: linear-gradient(90deg, #e2e8f0 25%, #f1f5f9 50%, #e2e8f0 75%);
+  background-size: 200% 100%;
+  border-radius: 8px;
+  animation: shimmer 1.5s infinite;
+}
+
+@keyframes shimmer {
+  0% {
+    background-position: 200% 0;
+  }
+  100% {
+    background-position: -200% 0;
+  }
+}
+
+.app.dark-mode .metal-detail-container {
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.app.dark-mode .placeholder-title,
+.app.dark-mode .placeholder-info,
+.app.dark-mode .placeholder-chart {
+  background: linear-gradient(90deg, #334155 25%, #475569 50%, #334155 75%);
+  background-size: 200% 100%;
+}
+
+.header-brand {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  transition: opacity 0.2s;
+}
+
+.header-brand:hover {
+  opacity: 0.9;
+}
+
+.header-brand:active {
+  opacity: 0.8;
+}
+
+.header-logo {
+  width: 32px;
+  height: 32px;
+  object-fit: contain;
+}
+
+.header h1 {
+  font-size: 1.8rem;
+  font-weight: 600;
+  margin: 0;
+}
+
+.theme-toggle {
+  background: none;
+  border: none;
+  font-size: 1.5rem;
+  cursor: pointer;
+  padding: 0.5rem;
+  border-radius: 50%;
+  transition: background-color 0.2s;
+}
+
+.theme-toggle:hover {
+  background-color: rgba(0, 0, 0, 0.1);
+}
+
+.header-actions {
+  display: flex;
+  gap: 1rem;
+  align-items: center;
+}
+
+.header-nickname {
+  font-size: 0.875rem;
+  color: #333;
+  font-weight: 500;
+  padding: 0.375rem 0.875rem;
+  background: linear-gradient(135deg, rgba(59, 130, 246, 0.1) 0%, rgba(147, 197, 253, 0.15) 100%);
+  border-radius: 20px;
+  border: 1px solid rgba(59, 130, 246, 0.2);
+  cursor: pointer;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.375rem;
+}
+
+.header-nickname::before {
+  content: '👋';
+  font-size: 0.875rem;
+  transition: transform 0.3s ease;
+}
+
+.header-nickname:hover {
+  background: linear-gradient(135deg, rgba(59, 130, 246, 0.2) 0%, rgba(147, 197, 253, 0.25) 100%);
+  border-color: rgba(59, 130, 246, 0.4);
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(59, 130, 246, 0.25);
+}
+
+.header-nickname:hover::before {
+  transform: rotate(20deg) scale(1.1);
+}
+
+.header-nickname::after {
+  content: '';
+  position: absolute;
+  inset: -2px;
+  border-radius: 22px;
+  background: linear-gradient(135deg, rgba(59, 130, 246, 0.3) 0%, rgba(147, 197, 253, 0.3) 100%);
+  opacity: 0;
+  z-index: -1;
+  transition: opacity 0.3s ease;
+  filter: blur(4px);
+}
+
+.header-nickname:hover::after {
+  opacity: 1;
+}
+
+.app.dark-mode .header-nickname {
+  color: #e2e8f0;
+  background: linear-gradient(135deg, rgba(96, 165, 250, 0.15) 0%, rgba(59, 130, 246, 0.2) 100%);
+  border-color: rgba(96, 165, 250, 0.3);
+}
+
+.app.dark-mode .header-nickname:hover {
+  background: linear-gradient(135deg, rgba(96, 165, 250, 0.25) 0%, rgba(59, 130, 246, 0.35) 100%);
+  border-color: rgba(96, 165, 250, 0.5);
+  box-shadow: 0 4px 12px rgba(96, 165, 250, 0.35);
+}
+
+.app.dark-mode .header-nickname::after {
+  background: linear-gradient(135deg, rgba(96, 165, 250, 0.4) 0%, rgba(59, 130, 246, 0.4) 100%);
+}
+
+.logout-button {
+  padding: 0.5rem 1.5rem;
+  background: linear-gradient(90deg, #B3E5FC 0%, #E0F7FA 100%);
+  color: #333333;
+  border: none;
+  border-radius: 24px;
+  font-size: 1rem;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.logout-button:hover {
+  opacity: 0.9;
+}
+
+.app.dark-mode .logout-button {
+  background: linear-gradient(90deg, #1e3a8a 0%, #3b82f6 100%);
+  color: white;
+}
+
+.app.dark-mode .logout-button:hover {
+  opacity: 0.9;
+}
+
+/* 深色模式下的header样式 */
+.app.dark-mode .header {
+  background: linear-gradient(90deg, #1e3a8a 0%, #3b82f6 100%);
+  color: white;
+}
+
+.app.dark-mode .theme-toggle:hover {
+  background-color: rgba(255, 255, 255, 0.2);
+}
+
+.main {
+  flex: 1;
+  padding: 2rem;
+  max-width: 1200px;
+  margin: 0 auto;
+  width: 100%;
+}
+
+.search-page {
+  background-color: white;
+  border-radius: 8px;
+  padding: 2rem;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+}
+
+.tab-selector {
+  display: flex;
+  margin-bottom: 2rem;
+  border-bottom: 1px solid #e2e8f0;
+}
+
+.tab-button {
+  padding: 0.75rem 1.5rem;
+  border: none;
+  background: none;
+  font-size: 16px !important;
+  font-weight: 500;
+  color: #64748b;
+  cursor: pointer;
+  border-bottom: 2px solid transparent;
+  transition: all 0.2s;
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen', 'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue', sans-serif;
+  min-width: 80px;
+  text-align: center;
+}
+
+.tab-button.active {
+  color: #3b82f6;
+  border-bottom-color: #3b82f6;
+}
+
+.search-container {
+  display: flex;
+  gap: 1rem;
+  margin-bottom: 2rem;
+}
+
+.code-input {
+  flex: 1;
+  padding: 0.75rem 1rem;
+  border: 1px solid #e2e8f0;
+  border-radius: 4px;
+  font-size: 1rem;
+  outline: none;
+  transition: border-color 0.2s;
+}
+
+.code-input:focus {
+  border-color: #3b82f6;
+  box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1);
+}
+
+.search-button, .reset-button, .back-button {
+  padding: 0.75rem 1.5rem;
+  border: none;
+  border-radius: 4px;
+  font-size: 1rem;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.search-button {
+  background: linear-gradient(90deg, #B3E5FC 0%, #E0F7FA 100%);
+  color: #333333;
+}
+
+.search-button:hover {
+  opacity: 0.9;
+}
+
+.reset-button, .back-button {
+  background-color: #f1f5f9;
+  color: #334155;
+}
+
+.reset-button:hover, .back-button:hover {
+  background-color: #e2e8f0;
+}
+
+.example-codes {
+  margin-top: 1.5rem;
+}
+
+.example-codes h3 {
+  font-size: 1.1rem;
+  font-weight: 600;
+  margin-bottom: 1rem;
+  color: #334155;
+}
+
+.example-code {
+  display: inline-block;
+  padding: 0.5rem 1rem;
+  background-color: #f1f5f9;
+  border-radius: 4px;
+  margin-right: 1rem;
+  margin-bottom: 1rem;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.example-code:hover {
+  background-color: #e2e8f0;
+}
+
+.detail-page {
+  background-color: white;
+  border-radius: 8px;
+  padding: 2rem;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+}
+
+.back-button {
+  width: 48px;
+  height: 48px;
+  background: linear-gradient(135deg, rgba(255, 255, 255, 0.9), rgba(255, 255, 255, 0.7));
+  border: none;
+  border-radius: 50%;
+  color: #1e3a8a;
+  font-size: 28px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+  border: 1px solid rgba(30, 58, 138, 0.2);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: 2rem;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+  position: relative;
+  overflow: hidden;
+}
+
+.back-button::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.4), transparent);
+  transition: left 0.6s ease;
+}
+
+.back-button:hover {
+  background: linear-gradient(135deg, rgba(255, 255, 255, 1), rgba(255, 255, 255, 0.8));
+  color: #1e40af;
+  box-shadow: 0 6px 16px rgba(0, 0, 0, 0.12);
+  transform: translateY(-2px);
+}
+
+.back-button:hover::before {
+  left: 100%;
+}
+
+.back-button:active {
+  transform: translateY(0);
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+}
+
+.app.dark-mode .back-button {
+  background: linear-gradient(135deg, rgba(30, 41, 59, 0.9), rgba(15, 23, 42, 0.7));
+  color: #60a5fa;
+  border: 1px solid rgba(96, 165, 250, 0.3);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+}
+
+.app.dark-mode .back-button:hover {
+  background: linear-gradient(135deg, rgba(30, 41, 59, 1), rgba(15, 23, 42, 0.8));
+  color: #93c5fd;
+  box-shadow: 0 6px 16px rgba(0, 0, 0, 0.25);
+}
+
+.app.dark-mode .back-button::before {
+  background: linear-gradient(90deg, transparent, rgba(96, 165, 250, 0.2), transparent);
+}
+
+.stock-detail h2, .fund-detail h2, .metal-detail h2 {
+  font-size: 1.5rem;
+  font-weight: 600;
+  margin-bottom: 1.5rem;
+  color: #1e293b;
+}
+
+.basic-info {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: 1rem;
+  margin-bottom: 2rem;
+  padding: 1.5rem;
+  background-color: #f8fafc;
+  border-radius: 8px;
+}
+
+.stock-basic-info {
+  margin-bottom: 2rem;
+  padding: 1.5rem;
+  background-color: #f8fafc;
+  border-radius: 8px;
+}
+
+.stock-basic-info h3 {
+  font-size: 1.1rem;
+  font-weight: 600;
+  margin-bottom: 1rem;
+  color: #334155;
+}
+
+.info-grid {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+.info-grid .info-item {
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+}
+
+.info-grid .info-item .label {
+  font-size: 0.875rem;
+  color: #64748b;
+}
+
+.info-grid .info-item .value {
+  font-size: 1rem;
+  line-height: 1.4;
+  color: #334155;
+}
+
+.financial-statements {
+  margin-top: 2rem;
+}
+
+.financial-statements h3 {
+  font-size: 1.2rem;
+  font-weight: 600;
+  margin-bottom: 1.5rem;
+  color: #334155;
+}
+
+.balance-sheet, .income-statement, .cash-flow {
+  margin-bottom: 2rem;
+  padding: 1.5rem;
+  background-color: #f8fafc;
+  border-radius: 8px;
+}
+
+.balance-sheet h4, .income-statement h4, .cash-flow h4 {
+  font-size: 1rem;
+  font-weight: 600;
+  margin-bottom: 1rem;
+  color: #475569;
+}
+
+
+.info-item {
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+}
+
+.info-item .label {
+  font-size: 0.875rem;
+  color: #64748b;
+}
+
+.info-item .value {
+  font-size: 1.125rem;
+  font-weight: 600;
+  color: #1e293b;
+}
+
+.info-item .value.positive {
+  color: #10b981;
+}
+
+.info-item .value.negative {
+  color: #ef4444;
+}
+
+.valuation-indicators, .performance-indicators {
+  margin-bottom: 2rem;
+}
+
+.valuation-indicators h3, .performance-indicators h3 {
+  font-size: 1.1rem;
+  font-weight: 600;
+  margin-bottom: 1rem;
+  color: #334155;
+}
+
+.indicator-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+  gap: 1rem;
+  padding: 1.5rem;
+  background-color: #f8fafc;
+  border-radius: 8px;
+}
+
+.indicator-item {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.indicator-label {
+  font-size: 0.875rem;
+  color: #64748b;
+}
+
+.indicator-value {
+  font-size: 1.125rem;
+  font-weight: 600;
+  color: #1e293b;
+}
+
+.indicator-value.positive {
+  color: #10b981;
+}
+
+.indicator-value.negative {
+  color: #ef4444;
+}
+
+.company-description, .fund-description, .metal-description {
+  margin-bottom: 2rem;
+}
+
+.company-description h3, .fund-description h3, .metal-description h3 {
+  font-size: 1.1rem;
+  font-weight: 600;
+  margin-bottom: 1rem;
+  color: #334155;
+}
+
+.company-description p, .fund-description p, .metal-description p {
+  font-size: 1rem;
+  line-height: 1.6;
+  color: #475569;
+  padding: 1.5rem;
+  background-color: #f8fafc;
+  border-radius: 8px;
+}
+
+.year-month-selector {
+  display: flex;
+  gap: 2rem;
+  margin-bottom: 1.5rem;
+  align-items: center;
+}
+
+.year-selector, .month-selector {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.year-select, .month-select {
+  padding: 0.5rem;
+  border: 1px solid #e2e8f0;
+  border-radius: 4px;
+  font-size: 0.875rem;
+  outline: none;
+  transition: border-color 0.2s;
+}
+
+.year-select:focus, .month-select:focus {
+  border-color: #3b82f6;
+  box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1);
+}
+
+.price-chart, .nav-chart {
+  margin-bottom: 2rem;
+  padding: 1.5rem;
+  background-color: #f8fafc;
+  border-radius: 8px;
+}
+
+.chart-controls {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 1.5rem;
+  flex-wrap: wrap;
+  gap: 1rem;
+}
+
+.indicator-selector {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.indicator-select {
+  padding: 0.5rem;
+  border: 1px solid #e2e8f0;
+  border-radius: 4px;
+  font-size: 0.875rem;
+  outline: none;
+  transition: border-color 0.2s;
+}
+
+.indicator-select:focus {
+  border-color: #3b82f6;
+  box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1);
+}
+
+.indicator-description {
+  margin-top: 1.5rem;
+  padding: 1.5rem;
+  background-color: #f1f5f9;
+  border-radius: 8px;
+}
+
+.indicator-description h4 {
+  font-size: 1.1rem;
+  font-weight: 600;
+  margin-bottom: 1rem;
+  color: #334155;
+}
+
+.indicator-description p {
+  font-size: 1rem;
+  line-height: 1.6;
+  color: #475569;
+  margin-bottom: 1rem;
+}
+
+.indicator-description ul {
+  margin-bottom: 1rem;
+  padding-left: 1.5rem;
+}
+
+.indicator-description li {
+  font-size: 1rem;
+  line-height: 1.6;
+  color: #475569;
+  margin-bottom: 0.5rem;
+}
+
+.investment-advice {
+  margin-top: 2rem;
+  padding: 1.5rem;
+  background-color: #f0f9ff;
+  border-left: 4px solid #3b82f6;
+  border-radius: 4px;
+}
+
+.investment-advice h3 {
+  font-size: 1.1rem;
+  font-weight: 600;
+  margin-bottom: 1rem;
+  color: #1e40af;
+}
+
+.advice-text {
+  font-size: 1rem;
+  line-height: 1.6;
+  color: #1e40af;
+  white-space: pre-wrap;
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
+    'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue',
+    sans-serif;
+}
+
+.export-section {
+  margin-top: 2rem;
+  padding: 1.5rem;
+  background-color: #f8fafc;
+  border-radius: 8px;
+}
+
+.export-section h3 {
+  font-size: 1.1rem;
+  font-weight: 600;
+  margin-bottom: 1rem;
+  color: #334155;
+}
+
+.export-buttons {
+  display: flex;
+  gap: 1rem;
+}
+
+.export-button {
+  padding: 0.75rem 1.5rem;
+  border: none;
+  border-radius: 4px;
+  font-size: 1rem;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.export-button.pdf {
+  background-color: #ef4444;
+  color: white;
+}
+
+.export-button.pdf:hover {
+  background-color: #dc2626;
+}
+
+.export-button.excel {
+  background-color: #10b981;
+  color: white;
+}
+
+.export-button.excel:hover {
+  background-color: #059669;
+}
+
+.portfolio-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 2rem;
+}
+
+.portfolio-header h3 {
+  font-size: 1.5rem;
+  font-weight: 600;
+  margin: 0;
+  color: #1e293b;
+}
+
+.portfolio-section {
+  margin-bottom: 2rem;
+}
+
+.portfolio-section h4 {
+  font-size: 1.1rem;
+  font-weight: 600;
+  margin-bottom: 1rem;
+  color: #334155;
+}
+
+.portfolio-table {
+  width: 100%;
+  border-collapse: collapse;
+  background-color: white;
+  border-radius: 8px;
+  overflow: hidden;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.portfolio-table th, .portfolio-table td {
+  padding: 1rem;
+  text-align: left;
+  border-bottom: 1px solid #e2e8f0;
+}
+
+.portfolio-table th {
+  background-color: #f8fafc;
+  font-weight: 600;
+  color: #334155;
+}
+
+.portfolio-table tr:hover {
+  background-color: #f8fafc;
+}
+
+.profit {
+  color: #10b981;
+  font-weight: 600;
+}
+
+.empty-message {
+  padding: 2rem;
+  text-align: center;
+  color: #64748b;
+  background-color: #f8fafc;
+  border-radius: 8px;
+}
+
+.portfolio-management {
+  display: flex;
+  gap: 2rem;
+  margin-bottom: 2rem;
+  flex-wrap: wrap;
+}
+
+.portfolio-list {
+  flex: 1;
+  min-width: 300px;
+  background-color: #f8fafc;
+  border-radius: 8px;
+  padding: 1.5rem;
+}
+
+.portfolio-list h3 {
+  font-size: 1.1rem;
+  font-weight: 600;
+  margin-bottom: 1rem;
+  color: #334155;
+}
+
+.portfolio-list ul {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.portfolio-list li {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 0.75rem;
+  padding: 0.75rem;
+  background-color: white;
+  border-radius: 4px;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+}
+
+.portfolio-item {
+  flex: 1;
+  padding: 0.5rem 1rem;
+  border: none;
+  background: none;
+  font-size: 1rem;
+  font-weight: 500;
+  color: #334155;
+  cursor: pointer;
+  border-radius: 4px;
+  transition: background-color 0.2s;
+  text-align: left;
+}
+
+.portfolio-item:hover {
+  background-color: #f1f5f9;
+}
+
+.portfolio-item.active {
+  background-color: #dbeafe;
+  color: #1e40af;
+}
+
+.delete-portfolio {
+  padding: 0.5rem 1rem;
+  border: none;
+  background-color: #ef4444;
+  color: white;
+  font-size: 0.875rem;
+  font-weight: 500;
+  cursor: pointer;
+  border-radius: 4px;
+  transition: background-color 0.2s;
+}
+
+.delete-portfolio:hover {
+  background-color: #dc2626;
+}
+
+.create-portfolio {
+  flex: 1;
+  min-width: 300px;
+  background-color: #f8fafc;
+  border-radius: 8px;
+  padding: 1.5rem;
+}
+
+.create-portfolio h3 {
+  font-size: 1.1rem;
+  font-weight: 600;
+  margin-bottom: 1rem;
+  color: #334155;
+}
+
+.create-form {
+  display: flex;
+  gap: 1rem;
+}
+
+.create-form input {
+  flex: 1;
+  padding: 0.75rem 1rem;
+  border: 1px solid #e2e8f0;
+  border-radius: 4px;
+  font-size: 1rem;
+  outline: none;
+  transition: border-color 0.2s;
+}
+
+.create-form input:focus {
+  border-color: #3b82f6;
+  box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1);
+}
+
+.create-form button {
+  padding: 0.75rem 1.5rem;
+  border: none;
+  background-color: #3b82f6;
+  color: white;
+  font-size: 1rem;
+  font-weight: 500;
+  cursor: pointer;
+  border-radius: 4px;
+  transition: background-color 0.2s;
+}
+
+.create-form button:hover {
+  background-color: #2563eb;
+}
+
+.create-form button:disabled {
+  background-color: #93c5fd;
+  cursor: not-allowed;
+}
+
+.footer {
+  background-color: #1e293b;
+  color: white;
+  padding: 1.5rem;
+  text-align: center;
+  margin-top: 2rem;
+}
+
+.footer p {
+  font-size: 0.875rem;
+  opacity: 0.8;
+}
+
+/* 深色模式样式 */
+.app.dark-mode .search-page,
+.app.dark-mode .detail-page {
+  background-color: #1e293b;
+  color: #f1f5f9;
+}
+
+.app.dark-mode .tab-selector {
+  border-bottom-color: #334155;
+}
+
+.app.dark-mode .tab-button {
+  color: #94a3b8;
+}
+
+.app.dark-mode .tab-button.active {
+  color: #60a5fa;
+  border-bottom-color: #60a5fa;
+}
+
+.app.dark-mode .code-input,
+.app.dark-mode .year-select,
+.app.dark-mode .month-select,
+.app.dark-mode .indicator-select,
+.app.dark-mode .create-form input {
+  background-color: #334155;
+  border-color: #475569;
+  color: #f1f5f9;
+}
+
+.app.dark-mode .code-input:focus,
+.app.dark-mode .year-select:focus,
+.app.dark-mode .month-select:focus,
+.app.dark-mode .indicator-select:focus,
+.app.dark-mode .create-form input:focus {
+  border-color: #60a5fa;
+  box-shadow: 0 0 0 3px rgba(96, 165, 250, 0.2);
+}
+
+.app.dark-mode .reset-button,
+.app.dark-mode .back-button {
+  background-color: #334155;
+  color: #f1f5f9;
+}
+
+.app.dark-mode .reset-button:hover,
+.app.dark-mode .back-button:hover {
+  background-color: #475569;
+}
+
+.app.dark-mode .search-button {
+  background: linear-gradient(90deg, #1e3a8a 0%, #3b82f6 100%);
+  color: white;
+}
+
+.app.dark-mode .search-button:hover {
+  opacity: 0.9;
+}
+
+.app.dark-mode .example-codes h3 {
+  color: #f1f5f9;
+}
+
+.app.dark-mode .example-code {
+  background-color: #334155;
+  color: #f1f5f9;
+}
+
+.app.dark-mode .example-code:hover {
+  background-color: #475569;
+}
+
+.app.dark-mode .stock-detail h2,
+.app.dark-mode .fund-detail h2,
+.app.dark-mode .metal-detail h2 {
+  color: #f1f5f9;
+}
+
+.app.dark-mode .basic-info,
+.app.dark-mode .stock-basic-info,
+.app.dark-mode .balance-sheet,
+.app.dark-mode .income-statement,
+.app.dark-mode .cash-flow,
+.app.dark-mode .indicator-grid,
+.app.dark-mode .company-description p,
+.app.dark-mode .fund-description p,
+.app.dark-mode .metal-description p,
+.app.dark-mode .price-chart,
+.app.dark-mode .nav-chart,
+.app.dark-mode .indicator-description,
+.app.dark-mode .export-section,
+.app.dark-mode .portfolio-list,
+.app.dark-mode .create-portfolio {
+  background-color: #334155;
+  color: #f1f5f9;
+}
+
+.app.dark-mode .stock-basic-info h3,
+.app.dark-mode .financial-statements h3,
+.app.dark-mode .balance-sheet h4,
+.app.dark-mode .income-statement h4,
+.app.dark-mode .cash-flow h4,
+.app.dark-mode .valuation-indicators h3,
+.app.dark-mode .performance-indicators h3,
+.app.dark-mode .company-description h3,
+.app.dark-mode .fund-description h3,
+.app.dark-mode .metal-description h3,
+.app.dark-mode .indicator-description h4,
+.app.dark-mode .export-section h3,
+.app.dark-mode .portfolio-list h3,
+.app.dark-mode .create-portfolio h3 {
+  color: #f1f5f9;
+}
+
+.app.dark-mode .info-grid .info-item .label,
+.app.dark-mode .info-item .label,
+.app.dark-mode .indicator-label {
+  color: #94a3b8;
+}
+
+.app.dark-mode .info-grid .info-item .value,
+.app.dark-mode .info-item .value,
+.app.dark-mode .indicator-value {
+  color: #f1f5f9;
+}
+
+.app.dark-mode .company-description p,
+.app.dark-mode .fund-description p,
+.app.dark-mode .metal-description p,
+.app.dark-mode .indicator-description p,
+.app.dark-mode .indicator-description li {
+  color: #e2e8f0;
+}
+
+.app.dark-mode .investment-advice {
+  background-color: #1e3a5f;
+  border-left-color: #60a5fa;
+}
+
+.app.dark-mode .investment-advice h3,
+.app.dark-mode .advice-text {
+  color: #bfdbfe;
+}
+
+.app.dark-mode .portfolio-header h3 {
+  color: #f1f5f9;
+}
+
+.app.dark-mode .portfolio-section h4 {
+  color: #f1f5f9;
+}
+
+.app.dark-mode .portfolio-table {
+  background-color: #334155;
+}
+
+.app.dark-mode .portfolio-table th {
+  background-color: #475569;
+  color: #f1f5f9;
+  border-bottom-color: #64748b;
+}
+
+.app.dark-mode .portfolio-table td {
+  border-bottom-color: #475569;
+  color: #f1f5f9;
+}
+
+.app.dark-mode .portfolio-table tr:hover {
+  background-color: #475569;
+}
+
+.app.dark-mode .empty-message {
+  background-color: #334155;
+  color: #94a3b8;
+}
+
+.app.dark-mode .portfolio-list li {
+  background-color: #475569;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.3);
+}
+
+.app.dark-mode .portfolio-item {
+  color: #f1f5f9;
+}
+
+.app.dark-mode .portfolio-item:hover {
+  background-color: #64748b;
+}
+
+.app.dark-mode .portfolio-item.active {
+  background-color: #1e40af;
+  color: #bfdbfe;
+}
+
+.app.dark-mode .footer {
+  background-color: #0f172a;
+  color: #f1f5f9;
+}
+
+@media (max-width: 768px) {
+  .main {
+    padding: 1rem;
+  }
+
+  .search-page, .detail-page {
+    padding: 1.5rem;
+  }
+
+  .search-container {
+    flex-direction: column;
+  }
+
+  .basic-info, .indicator-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .year-month-selector {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 1rem;
+  }
+
+  .tab-selector {
+    overflow-x: auto;
+    white-space: nowrap;
+  }
+
+  .tab-button {
+    white-space: nowrap;
+  }
+}
+
+/* 弹窗样式 */
+.modal-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: rgba(0, 0, 0, 0.5);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 1000;
+}
+
+.modal-content {
+  background-color: white;
+  padding: 2rem;
+  border-radius: 8px;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  max-width: 400px;
+  width: 100%;
+  text-align: center;
+}
+
+.modal-content h3 {
+  margin-bottom: 1rem;
+  color: #1e293b;
+}
+
+.modal-content p {
+  margin-bottom: 2rem;
+  color: #64748b;
+}
+
+.modal-buttons {
+  display: flex;
+  justify-content: center;
+  gap: 1rem;
+}
+
+.modal-button {
+  padding: 0.75rem 1.5rem;
+  border: none;
+  border-radius: 4px;
+  font-size: 1rem;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.modal-button.cancel {
+  background-color: #64748b;
+  color: white;
+}
+
+.modal-button.cancel:hover {
+  background-color: #475569;
+}
+
+.modal-button.confirm {
+  background-color: #3b82f6;
+  color: white;
+}
+
+.modal-button.confirm:hover {
+  background-color: #2563eb;
+}
+
+/* 深色模式下的弹窗样式 */
+.app.dark-mode .modal-content {
+  background-color: #1e293b;
+  color: #f1f5f9;
+}
+
+.app.dark-mode .modal-content h3 {
+  color: #f1f5f9;
+}
+
+.app.dark-mode .modal-content p {
+  color: #cbd5e1;
+}
+
+.app.dark-mode .modal-button.cancel {
+  background-color: #475569;
+}
+
+.app.dark-mode .modal-button.cancel:hover {
+  background-color: #334155;
+}
+
+.app.dark-mode .modal-button.confirm {
+  background-color: #2563eb;
+}
+
+.app.dark-mode .modal-button.confirm:hover {
+  background-color: #1d4ed8;
+}
+
+/* 投资推荐功能样式 */
+.investment-recommendation {
+  margin-top: 2rem;
+  padding: 1.5rem;
+  background-color: #f0f8ff;
+  border-radius: 8px;
+  border: 1px solid #b3d9ff;
+}
+
+.investment-recommendation h3 {
+  margin-top: 0;
+  margin-bottom: 1rem;
+  color: #1e90ff;
+  font-size: 1.1rem;
+  font-weight: 600;
+}
+
+.recommendation-input {
+  display: flex;
+  gap: 1rem;
+  margin-bottom: 1.5rem;
+}
+
+.recommendation-code-input {
+  flex: 1;
+  padding: 0.75rem 1rem;
+  border: 1px solid #e2e8f0;
+  border-radius: 4px;
+  font-size: 1rem;
+  outline: none;
+  transition: border-color 0.2s;
+}
+
+.recommendation-code-input:focus {
+  border-color: #3b82f6;
+  box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1);
+}
+
+.recommendation-button {
+  padding: 0.75rem 1.5rem;
+  background: linear-gradient(90deg, #B3E5FC 0%, #E0F7FA 100%);
+  color: #333333;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  font-size: 1rem;
+  font-weight: 500;
+  transition: opacity 0.3s;
+}
+
+.recommendation-button:hover:not(:disabled) {
+  opacity: 0.9;
+}
+
+.recommendation-button:disabled {
+  background: linear-gradient(90deg, #B3E5FC 0%, #E0F7FA 100%);
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+.recommendation-result {
+  margin-top: 1.5rem;
+  padding: 1.5rem;
+  background-color: white;
+  border-radius: 4px;
+  border: 1px solid #e2e8f0;
+}
+
+.recommendation-result h4 {
+  margin-top: 0;
+  margin-bottom: 1rem;
+  color: #334155;
+  font-size: 1rem;
+  font-weight: 600;
+}
+
+.recommendation-content {
+  white-space: pre-line;
+  line-height: 1.6;
+  color: #475569;
+  font-size: 1rem;
+}
+
+/* 深色模式下的投资推荐样式 */
+.app.dark-mode .investment-recommendation {
+  background-color: #1a2b3c;
+  border-color: #336699;
+}
+
+.app.dark-mode .investment-recommendation h3 {
+  color: #4da6ff;
+}
+
+.app.dark-mode .recommendation-code-input {
+  background-color: #334155;
+  border-color: #475569;
+  color: #f1f5f9;
+}
+
+.app.dark-mode .recommendation-code-input:focus {
+  border-color: #60a5fa;
+  box-shadow: 0 0 0 3px rgba(96, 165, 250, 0.2);
+}
+
+.app.dark-mode .recommendation-button {
+  background: linear-gradient(90deg, #1e3a8a 0%, #3b82f6 100%);
+}
+
+.app.dark-mode .recommendation-button:hover:not(:disabled) {
+  opacity: 0.9;
+}
+
+.app.dark-mode .recommendation-button:disabled {
+  background: linear-gradient(90deg, #1e3a8a 0%, #3b82f6 100%);
+  opacity: 0.6;
+}
+
+.app.dark-mode .recommendation-result {
+  background-color: #334155;
+  border-color: #475569;
+}
+
+.app.dark-mode .recommendation-result h4 {
+  color: #f1f5f9;
+}
+
+.app.dark-mode .recommendation-content {
+  color: #e2e8f0;
+}
+
+/* 响应式设计 */
+@media (max-width: 768px) {
+  .recommendation-input {
+    flex-direction: column;
+  }
+}
+
+/* 加载指示器样式 */
+.loading-indicator {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  margin-top: 1.5rem;
+  padding: 2rem;
+  background-color: #f8fafc;
+  border-radius: 8px;
+}
+
+.spinner {
+  width: 40px;
+  height: 40px;
+  border: 4px solid #e2e8f0;
+  border-top: 4px solid #3b82f6;
+  border-radius: 50%;
+  animation: spin 1s linear infinite;
+  margin-bottom: 1rem;
+}
+
+@keyframes spin {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}
+
+.loading-indicator p {
+  color: #475569;
+  font-size: 1rem;
+  margin: 0;
+}
+
+/* 深色模式下的加载指示器样式 */
+.app.dark-mode .loading-indicator {
+  background-color: #334155;
+}
+
+.app.dark-mode .spinner {
+  border-color: #475569;
+  border-top-color: #60a5fa;
+}
+
+.app.dark-mode .loading-indicator p {
+  color: #e2e8f0;
+}
+
+/* 投资排行榜轮播卡片样式 */
+.carousel-section {
+  margin-top: 3rem;
+  padding: 1.5rem;
+  background-color: #f8fafc;
+  border-radius: 8px;
+  border: 1px solid #e2e8f0;
+}
+
+.carousel-section h3 {
+  margin-top: 0;
+  margin-bottom: 2rem;
+  color: #334155;
+  font-size: 1.2rem;
+  font-weight: 600;
+}
+
+.carousel-container {
+  position: relative;
+  overflow: hidden;
+  border-radius: 8px;
+}
+
+.carousel-wrapper {
+  position: relative;
+  overflow: hidden;
+  width: 100%;
+}
+
+.carousel-slide {
+  display: flex;
+  gap: 1.5rem;
+  animation: scroll 30s linear infinite;
+  width: calc(280px * 8 + 1.5rem * 7);
+}
+
+.carousel-container:hover .carousel-slide {
+  animation-play-state: paused;
+}
+
+.carousel-container .carousel-slide {
+  animation-play-state: running;
+}
+
+.rank-card {
+  flex: 0 0 280px;
+  min-width: 280px;
+  background-color: white;
+  border-radius: 8px;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  padding: 1.5rem;
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+  transition: transform 0.2s, box-shadow 0.2s;
+}
+
+@keyframes scroll {
+  0% {
+    transform: translateX(0);
+  }
+  100% {
+    transform: translateX(calc(-280px * 4 - 1.5rem * 4));
+  }
+}
+
+.rank-card:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 6px 12px rgba(0, 0, 0, 0.15);
+}
+
+.card-header h4 {
+  margin: 0;
+  font-size: 1.1rem;
+  font-weight: 600;
+  color: #1e293b;
+}
+
+.card-chart {
+  width: 100%;
+  height: 160px;
+  overflow: hidden;
+  border-radius: 6px;
+  margin: 1rem 0;
+}
+
+.card-img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transition: transform 0.3s ease;
+}
+
+.rank-card:hover .card-img {
+  transform: scale(1.05);
+}
+
+.card-rank-info {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font-size: 0.875rem;
+  flex-wrap: nowrap;
+  gap: 0.5rem;
+}
+
+.rank {
+  color: #64748b;
+  font-weight: 500;
+  flex: 1;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  font-size: 0.75rem;
+}
+
+.yearly-gain {
+  font-weight: 600;
+  padding: 0.25rem 0.75rem;
+  border-radius: 12px;
+  font-size: 0.75rem;
+  white-space: nowrap;
+  flex-shrink: 0;
+}
+
+.yearly-gain.positive {
+  color: #10b981;
+  background-color: #d1fae5;
+}
+
+.yearly-gain.negative {
+  color: #ef4444;
+  background-color: #fee2e2;
+}
+
+.card-chart {
+  height: 120px;
+  position: relative;
+  overflow: hidden;
+  border-radius: 4px;
+}
+
+.chart-placeholder {
+  width: 100%;
+  height: 100%;
+  position: relative;
+  background: linear-gradient(180deg, #f8fafc 0%, #f1f5f9 100%);
+}
+
+.chart-placeholder.positive-trend::after {
+  content: '';
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  width: 100%;
+  height: 60%;
+  background: linear-gradient(135deg, #10b981 0%, #34d399 100%);
+  clip-path: polygon(0 100%, 10% 85%, 20% 90%, 30% 75%, 40% 80%, 50% 65%, 60% 70%, 70% 55%, 80% 60%, 90% 45%, 100% 50%, 100% 100%);
+  opacity: 0.8;
+}
+
+.chart-placeholder.negative-trend::after {
+  content: '';
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  width: 100%;
+  height: 60%;
+  background: linear-gradient(135deg, #ef4444 0%, #f87171 100%);
+  clip-path: polygon(0 50%, 10% 65%, 20% 60%, 30% 75%, 40% 70%, 50% 85%, 60% 80%, 70% 95%, 80% 90%, 90% 100%, 100% 85%, 100% 100%);
+  opacity: 0.8;
+}
+
+.card-footer {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+  margin-top: auto;
+}
+
+.price-info, .volume-info {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font-size: 0.875rem;
+}
+
+.price-info .label, .volume-info .label {
+  color: #64748b;
+}
+
+.price-info .value, .volume-info .value {
+  font-weight: 600;
+  color: #1e293b;
+}
+
+.carousel-prev, .carousel-next {
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  background-color: rgba(255, 255, 255, 0.9);
+  border: 1px solid #e2e8f0;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  font-size: 1.2rem;
+  font-weight: bold;
+  cursor: pointer;
+  transition: all 0.2s;
+  z-index: 10;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.carousel-prev {
+  left: 1rem;
+}
+
+.carousel-next {
+  right: 1rem;
+}
+
+.carousel-prev:hover, .carousel-next:hover {
+  background-color: white;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);
+  transform: translateY(-50%) scale(1.05);
+}
+
+/* 深色模式下的轮播卡片样式 */
+.app.dark-mode .carousel-section {
+  background-color: #334155;
+  border-color: #475569;
+}
+
+.app.dark-mode .carousel-section h3 {
+  color: #f1f5f9;
+}
+
+.app.dark-mode .rank-card {
+  background-color: #1e293b;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.3);
+}
+
+.app.dark-mode .card-header h4 {
+  color: #f1f5f9;
+}
+
+.app.dark-mode .rank {
+  color: #94a3b8;
+}
+
+.app.dark-mode .yearly-gain.positive {
+  color: #34d399;
+  background-color: rgba(16, 185, 129, 0.2);
+}
+
+.app.dark-mode .yearly-gain.negative {
+  color: #f87171;
+  background-color: rgba(239, 68, 68, 0.2);
+}
+
+.app.dark-mode .chart-placeholder {
+  background: linear-gradient(180deg, #334155 0%, #475569 100%);
+}
+
+.app.dark-mode .price-info .label, .app.dark-mode .volume-info .label {
+  color: #94a3b8;
+}
+
+.app.dark-mode .price-info .value, .app.dark-mode .volume-info .value {
+  color: #f1f5f9;
+}
+
+.app.dark-mode .carousel-prev, .app.dark-mode .carousel-next {
+  background-color: rgba(30, 41, 59, 0.9);
+  border-color: #475569;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
+  color: #f1f5f9;
+}
+
+.app.dark-mode .carousel-prev:hover, .app.dark-mode .carousel-next:hover {
+  background-color: #334155;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.4);
+}
+
+/* 响应式设计 */
+@media (max-width: 1200px) {
+  .rank-card {
+    flex: 0 0 calc(33.333% - 1rem);
+    min-width: 250px;
+  }
+}
+
+@media (max-width: 992px) {
+  .rank-card {
+    flex: 0 0 calc(50% - 0.75rem);
+    min-width: 220px;
+  }
+}
+
+@media (max-width: 768px) {
+  .carousel-section {
+    padding: 1rem;
+  }
+
+  .rank-card {
+    flex: 0 0 100%;
+    min-width: 200px;
+  }
+
+  .carousel-prev, .carousel-next {
+    width: 32px;
+    height: 32px;
+    font-size: 1rem;
+  }
+
+  .carousel-prev {
+    left: 0.5rem;
+  }
+
+  .carousel-next {
+    right: 0.5rem;
+  }
+}
+
+/* 退出登录确认弹窗样式 */
+.logout-modal-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: rgba(0, 0, 0, 0.5);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 10000;
+  animation: fadeIn 0.2s ease-out;
+}
+
+.logout-modal-content {
+  background-color: white;
+  border-radius: 12px;
+  padding: 2rem;
+  max-width: 400px;
+  width: 90%;
+  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+  animation: scaleIn 0.3s ease-out;
+}
+
+.logout-modal-header {
+  text-align: center;
+  margin-bottom: 1rem;
+}
+
+.logout-modal-header h3 {
+  font-size: 1.25rem;
+  font-weight: 600;
+  color: #1e293b;
+  margin: 0;
+}
+
+.logout-modal-body {
+  text-align: center;
+  margin-bottom: 1.5rem;
+}
+
+.logout-modal-body p {
+  font-size: 1rem;
+  color: #64748b;
+  margin: 0;
+}
+
+.logout-modal-footer {
+  display: flex;
+  gap: 1rem;
+  justify-content: center;
+}
+
+.logout-modal-btn {
+  padding: 0.75rem 2rem;
+  border: none;
+  border-radius: 8px;
+  font-size: 1rem;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.logout-modal-btn.cancel {
+  background-color: #f1f5f9;
+  color: #475569;
+}
+
+.logout-modal-btn.cancel:hover {
+  background-color: #e2e8f0;
+}
+
+.logout-modal-btn.confirm {
+  background: linear-gradient(90deg, #3b82f6 0%, #2563eb 100%);
+  color: white;
+}
+
+.logout-modal-btn.confirm:hover {
+  opacity: 0.9;
+  transform: translateY(-1px);
+}
+
+/* 登出成功消息提示样式 */
+.logout-toast {
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  z-index: 10001;
+  animation: toastIn 0.3s ease-out, toastOut 0.3s ease-in 1.7s forwards;
+}
+
+.logout-toast-content {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  padding: 1rem 2rem;
+  background: linear-gradient(135deg, #10b981 0%, #059669 100%);
+  border-radius: 50px;
+  box-shadow: 0 10px 40px rgba(16, 185, 129, 0.4);
+}
+
+.logout-toast-icon {
+  width: 24px;
+  height: 24px;
+  background-color: white;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #10b981;
+  font-weight: bold;
+  font-size: 0.875rem;
+}
+
+.logout-toast-text {
+  color: white;
+  font-size: 1rem;
+  font-weight: 500;
+}
+
+@keyframes toastIn {
+  from {
+    opacity: 0;
+    transform: translate(-50%, -50%) scale(0.8);
+  }
+  to {
+    opacity: 1;
+    transform: translate(-50%, -50%) scale(1);
+  }
+}
+
+@keyframes toastOut {
+  from {
+    opacity: 1;
+    transform: translate(-50%, -50%) scale(1);
+  }
+  to {
+    opacity: 0;
+    transform: translate(-50%, -50%) scale(0.8);
+  }
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+@keyframes scaleIn {
+  from {
+    transform: scale(0.9);
+    opacity: 0;
+  }
+  to {
+    transform: scale(1);
+    opacity: 1;
+  }
+}
+
+/* 深色模式下的退出登录弹窗样式 */
+.app.dark-mode .logout-modal-content {
+  background-color: #1e293b;
+}
+
+.app.dark-mode .logout-modal-header h3 {
+  color: #f1f5f9;
+}
+
+.app.dark-mode .logout-modal-body p {
+  color: #94a3b8;
+}
+
+.app.dark-mode .logout-modal-btn.cancel {
+  background-color: #334155;
+  color: #f1f5f9;
+}
+
+.app.dark-mode .logout-modal-btn.cancel:hover {
+  background-color: #475569;
+}
+
+
+
