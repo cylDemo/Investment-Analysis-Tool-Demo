@@ -26,43 +26,74 @@
 
 ```
 Investment_Analysis_Tool_Demo/
-├── frontend/
-│   ├── public/
-│   ├── src/
-│   │   ├── assets/           # 静态资源
-│   │   ├── components/       # 组件
-│   │   │   ├── MarketNews/   # 市场资讯模块
-│   │   │   │   ├── index.jsx
-│   │   │   │   ├── MarketNews.css
-│   │   │   │   ├── NewsCard.jsx
-│   │   │   │   ├── NewsHeader.jsx
-│   │   │   │   ├── NewsTimeline.jsx
-│   │   │   │   └── NewsEmpty.jsx
-│   │   │   ├── FundDetail.jsx      # 基金详情
-│   │   │   ├── MetalDetail.jsx     # 金属详情
-│   │   │   ├── StockDetail.jsx     # 股票详情
-│   │   │   ├── Portfolio.jsx       # 投资组合
-│   │   │   ├── Settings.jsx        # 设置页面
-│   │   │   └── Login.jsx           # 登录页面
-│   │   ├── services/        # API服务
-│   │   │   └── newsApi.js   # 市场资讯API
-│   │   ├── types/           # TypeScript类型
-│   │   │   └── news.ts
-│   │   ├── App.css
-│   │   ├── App.jsx
-│   │   ├── index.css
-│   │   └── main.jsx
-│   ├── .gitignore
-│   ├── index.html
-│   ├── package.json
-│   └── vite.config.js
-├── backend/
-│   ├── index.js             # 主入口
-│   ├── package.json
-│   └── package-lock.json
-├── .gitignore
-└── README.md
+├── backend/                          # 后端服务
+│   ├── index.js                      # 主入口文件，Express服务器配置
+│   ├── package.json                  # 后端依赖配置
+│   └── package-lock.json             # 依赖锁定文件
+│
+├── frontend/                         # 前端应用
+│   ├── public/                       # 静态资源目录
+│   │   └── vite.svg                  # Vite logo
+│   │
+│   ├── src/                          # 源代码目录
+│   │   ├── assets/                   # 资源文件
+│   │   │   ├── 20260206152810_4.png  # 应用截图/图片
+│   │   │   ├── Logo_2.png            # 应用Logo
+│   │   │   └── react.svg             # React logo
+│   │   │
+│   │   ├── components/               # React组件
+│   │   │   ├── MarketNews/           # 市场资讯模块
+│   │   │   │   ├── index.jsx         # 市场资讯主组件
+│   │   │   │   ├── MarketNews.css    # 市场资讯样式
+│   │   │   │   ├── NewsCard.jsx      # 资讯卡片组件
+│   │   │   │   ├── NewsHeader.jsx    # 资讯头部组件（筛选、搜索）
+│   │   │   │   ├── NewsTimeline.jsx  # 时间轴组件
+│   │   │   │   └── NewsEmpty.jsx     # 空状态组件
+│   │   │   │
+│   │   │   ├── FundDetail.jsx        # 基金详情页
+│   │   │   ├── MetalDetail.jsx       # 金属详情页
+│   │   │   ├── StockDetail.jsx       # 股票详情页
+│   │   │   ├── Portfolio.jsx         # 投资组合页
+│   │   │   ├── Settings.jsx          # 设置页面
+│   │   │   ├── Settings.css          # 设置页面样式
+│   │   │   ├── Login.jsx             # 登录页面
+│   │   │   └── Login.css             # 登录页面样式
+│   │   │
+│   │   ├── services/                 # API服务层
+│   │   │   └── newsApi.js            # 市场资讯API接口
+│   │   │
+│   │   ├── types/                    # TypeScript类型定义
+│   │   │   └── news.ts               # 资讯相关类型
+│   │   │
+│   │   ├── App.css                   # 主应用样式
+│   │   ├── App.jsx                   # 主应用组件
+│   │   ├── index.css                 # 全局样式
+│   │   └── main.jsx                  # 应用入口
+│   │
+│   ├── .gitignore                    # 前端Git忽略配置
+│   ├── index.html                    # HTML模板
+│   ├── package.json                  # 前端依赖配置
+│   ├── package-lock.json             # 依赖锁定文件
+│   ├── README.md                     # 前端说明文档
+│   ├── eslint.config.js              # ESLint配置
+│   └── vite.config.js                # Vite构建配置
+│
+├── .gitignore                        # 全局Git忽略配置
+├── README.md                         # 项目说明文档
+├── create_repo.json                  # GitHub仓库创建配置（临时文件）
+└── generate_ssh_key.bat              # SSH密钥生成脚本（临时文件）
 ```
+
+### 目录说明
+
+| 目录/文件 | 说明 |
+|---------|------|
+| `backend/` | Node.js + Express 后端服务 |
+| `frontend/` | React + Vite 前端应用 |
+| `frontend/src/components/` | 页面组件和业务组件 |
+| `frontend/src/services/` | API 请求封装 |
+| `frontend/src/types/` | TypeScript 类型定义 |
+| `frontend/src/assets/` | 图片、图标等静态资源 |
 
 ## 核心功能
 
