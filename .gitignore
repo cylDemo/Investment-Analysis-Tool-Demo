@@ -48,6 +48,16 @@ pids
 
 # Microbundle cache
 .rpt2_cache/
+
+# Sensitive files
+*.bat
+*.json
+*.txt
+!package.json
+!package-lock.json
+!tsconfig.json
+!vite.config.js
+!eslint.config.js
 .rts2_cache_cjs/
 .rts2_cache_es/
 .rts2_cache_umd/

@@ -9,11 +9,6 @@ import MarketNews from './components/MarketNews';
 import logo from './assets/Logo_2.png';
 
 function App() {
-  // 页面加载时滚动到顶部
-  useEffect(() => {
-    window.scrollTo({ top: 0, behavior: 'auto' });
-  }, []);
-
   // 从localStorage中读取登录状态
   const [isLoggedIn, setIsLoggedIn] = useState(() => {
     return localStorage.getItem('isLoggedIn') === 'true';
@@ -47,6 +42,33 @@ function App() {
   const [recommendationResult, setRecommendationResult] = useState('');
   const [isLoading, setIsLoading] = useState(false);
   const [metalLoading, setMetalLoading] = useState(false);
+
+  // 页面加载时滚动到顶部
+  useEffect(() => {
+    window.scrollTo({ top: 0, behavior: 'auto' });
+  }, []);
+
+  // 金属页面自动加载数据
+  useEffect(() => {
+    const loadMetalData = async () => {
+      if (activeNavTab === 'metal' && !showDetail && !data && ['gold', 'silver', 'copper', 'platinum', 'lead'].includes(activeTab)) {
+        setMetalLoading(true);
+        try {
+          const response = await fetch(`http://localhost:3001/api/metal/${activeTab}`);
+          if (response.ok) {
+            const result = await response.json();
+            setData(result.data);
+          }
+        } catch (error) {
+          console.error('加载金属数据失败:', error);
+        } finally {
+          setMetalLoading(false);
+        }
+      }
+    };
+    
+    loadMetalData();
+  }, [activeNavTab, activeTab, showDetail, data]);
   
   // 退出登录确认弹窗状态
   const [showLogoutModal, setShowLogoutModal] = useState(false);
