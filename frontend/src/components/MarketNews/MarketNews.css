@@ -5,6 +5,87 @@
   padding-bottom: 2rem;
 }
 
+/* ========== 页面顶部标题区域（移到search-page位置） ========== */
+.market-news-page-header {
+  background: linear-gradient(135deg, #fff 0%, #f8fafc 100%);
+  border-bottom: 1px solid #e2e8f0;
+  padding: 0;
+}
+
+.page-header-content {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 1rem 1.5rem;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.page-header-right {
+  display: flex;
+  align-items: center;
+}
+
+.page-header-left {
+  display: flex;
+  flex-direction: column;
+  gap: 0.375rem;
+}
+
+.page-header-brand {
+  display: flex;
+  align-items: center;
+  gap: 0.625rem;
+}
+
+.page-brand-icon {
+  font-size: 24px;
+  line-height: 1;
+}
+
+.page-brand-title {
+  font-size: 22px;
+  font-weight: 700;
+  color: #1a202c;
+  margin: 0;
+  background: linear-gradient(135deg, #1890ff 0%, #096dd9 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+.page-brand-badge {
+  font-size: 11px;
+  font-weight: 600;
+  color: #fff;
+  background: linear-gradient(135deg, #ff4d4f 0%, #cf1322 100%);
+  padding: 2px 8px;
+  border-radius: 12px;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  animation: pulse-badge 2s ease-in-out infinite;
+}
+
+.page-header-date {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  font-size: 13px;
+  color: #64748b;
+}
+
+.page-date-full {
+  font-weight: 500;
+}
+
+.page-date-weekday {
+  padding: 2px 8px;
+  background: #f1f5f9;
+  border-radius: 4px;
+  font-size: 12px;
+  color: #475569;
+}
+
 /* ========== 头部区域 ========== */
 .news-header {
   background: linear-gradient(135deg, #fff 0%, #f8fafc 100%);
@@ -24,11 +105,12 @@
 .news-header-main {
   max-width: 1200px;
   margin: 0 auto;
-  padding: 1.25rem 1.5rem;
+  padding: 0.75rem 1.5rem;
   display: flex;
   align-items: center;
   justify-content: space-between;
   gap: 1.5rem;
+  border-bottom: 1px solid #e2e8f0;
 }
 
 /* 左侧品牌区域 */
@@ -36,6 +118,7 @@
   display: flex;
   flex-direction: column;
   gap: 0.375rem;
+  margin-right: auto;
 }
 
 .header-brand {
@@ -233,6 +316,10 @@
   align-items: center;
   transition: transform 0.2s ease;
   color: #94a3b8;
+}
+
+.dropdown-arrow.open {
+  transform: rotate(180deg);
 }
 
 .dropdown-arrow.open {
@@ -495,6 +582,7 @@
   display: flex;
   align-items: center;
   gap: 0.5rem;
+  flex-shrink: 0;
 }
 
 .filter-label {
@@ -1064,8 +1152,37 @@
   background: #1a1a2e;
 }
 
+/* 页面顶部标题区域深色模式 */
+.dark-mode .market-news-page-header {
+  background: linear-gradient(135deg, #1e293b 0%, #0f172a 100%);
+  border-bottom-color: #334155;
+}
+
+.dark-mode .page-brand-title {
+  background: linear-gradient(135deg, #60a5fa 0%, #3b82f6 100%);
+  -webkit-background-clip: text;
+  background-clip: text;
+}
+
+.dark-mode .page-brand-badge {
+  background: linear-gradient(135deg, #ef4444 0%, #dc2626 100%);
+}
+
+.dark-mode .page-header-date {
+  color: #94a3b8;
+}
+
+.dark-mode .page-date-weekday {
+  background: #334155;
+  color: #cbd5e1;
+}
+
 .dark-mode .news-header {
   background: linear-gradient(135deg, #1e293b 0%, #0f172a 100%);
+  border-bottom-color: #334155;
+}
+
+.dark-mode .news-header-main {
   border-bottom-color: #334155;
 }
 
@@ -1400,6 +1517,27 @@
 
 /* 响应式适配 */
 @media (max-width: 768px) {
+  .page-header-content {
+    padding: 0.75rem 1rem;
+  }
+
+  .page-header-left {
+    align-items: center;
+    text-align: center;
+  }
+
+  .page-header-brand {
+    justify-content: center;
+  }
+
+  .page-brand-title {
+    font-size: 20px;
+  }
+
+  .page-header-date {
+    justify-content: center;
+  }
+
   .news-header-main {
     flex-direction: column;
     gap: 1rem;
@@ -1423,11 +1561,22 @@
     justify-content: center;
   }
 
+  .news-header-main {
+    flex-direction: column;
+    gap: 0.75rem;
+    padding: 0.75rem 1rem;
+  }
+
   .news-filters {
     width: 100%;
-    justify-content: center;
+    justify-content: flex-start;
     gap: 0.75rem;
     flex-wrap: wrap;
+  }
+
+  .important-filter {
+    width: 100%;
+    justify-content: flex-end;
   }
 
   .search-box {
@@ -1508,5 +1657,635 @@
   .news-time {
     width: 50px;
     font-size: 12px;
+  }
+}
+
+/* ========== 特别关注功能样式 ========== */
+
+/* 特别关注切换按钮 */
+.watch-list-toggle-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.25rem;
+  padding: 0.375rem 0.625rem;
+  background: transparent;
+  border: none;
+  border-radius: 6px;
+  font-size: 13px;
+  color: #64748b;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.watch-list-toggle-btn:hover {
+  color: #f59e0b;
+  background: rgba(245, 158, 11, 0.08);
+}
+
+.watch-list-toggle-btn.active {
+  background: rgba(245, 158, 11, 0.15);
+  color: #d97706;
+}
+
+.watch-list-icon {
+  font-size: 14px;
+  line-height: 1;
+}
+
+.watch-list-text {
+  font-weight: 500;
+}
+
+.watch-list-count {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 16px;
+  height: 16px;
+  padding: 0 4px;
+  background: rgba(245, 158, 11, 0.15);
+  border-radius: 8px;
+  font-size: 11px;
+  font-weight: 600;
+  color: #f59e0b;
+}
+
+.watch-list-toggle-btn.active .watch-list-count {
+  background: rgba(245, 158, 11, 0.25);
+  color: #d97706;
+}
+
+/* 市场资讯内容区域 - 分栏布局 */
+.market-news-content {
+  display: flex;
+  transition: all 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.news-main-panel {
+  flex: 1;
+  transition: flex 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+  min-width: 0;
+}
+
+/* 分栏视图 */
+.market-news.split-view .news-main-panel {
+  flex: 0 0 70%;
+}
+
+/* 特别关注面板 */
+.watch-list-panel {
+  flex: 0 0 30%;
+  background: #fff;
+  border-left: 1px solid #e2e8f0;
+  display: flex;
+  flex-direction: column;
+  animation: slideInRight 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+  max-height: calc(100vh - 200px);
+  position: sticky;
+  top: 20px;
+}
+
+@keyframes slideInRight {
+  from {
+    opacity: 0;
+    transform: translateX(30px);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+.watch-list-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 1.25rem 1.5rem;
+  border-bottom: 1px solid #e2e8f0;
+  background: linear-gradient(135deg, #fffbeb 0%, #fef3c7 100%);
+}
+
+.watch-list-title {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  font-size: 16px;
+  font-weight: 600;
+  color: #92400e;
+}
+
+.watch-list-title-icon {
+  font-size: 18px;
+}
+
+.watch-list-total {
+  font-size: 14px;
+  font-weight: 500;
+  color: #f59e0b;
+}
+
+.watch-list-close {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 28px;
+  height: 28px;
+  background: rgba(0, 0, 0, 0.05);
+  border: none;
+  border-radius: 6px;
+  font-size: 14px;
+  color: #64748b;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.watch-list-close:hover {
+  background: rgba(0, 0, 0, 0.1);
+  color: #374151;
+}
+
+.watch-list-content {
+  flex: 1;
+  overflow-y: auto;
+  padding: 0.75rem;
+}
+
+.watch-list-empty {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 3rem 1.5rem;
+  text-align: center;
+}
+
+.watch-list-empty-icon {
+  font-size: 48px;
+  margin-bottom: 1rem;
+  opacity: 0.5;
+}
+
+.watch-list-empty p {
+  font-size: 15px;
+  font-weight: 500;
+  color: #374151;
+  margin: 0 0 0.5rem;
+}
+
+.watch-list-empty span {
+  font-size: 13px;
+  color: #9ca3af;
+}
+
+.watch-list-items {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+}
+
+.watch-list-item {
+  padding: 0.875rem;
+  background: #f8fafc;
+  border: 1px solid #e2e8f0;
+  border-radius: 8px;
+  transition: all 0.2s ease;
+}
+
+.watch-list-item:hover {
+  border-color: #f59e0b;
+  box-shadow: 0 2px 8px rgba(245, 158, 11, 0.1);
+}
+
+.watch-list-item-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 0.5rem;
+}
+
+.watch-list-item-category {
+  font-size: 11px;
+  font-weight: 600;
+  padding: 2px 8px;
+  border-radius: 4px;
+}
+
+.watch-list-item-time {
+  font-size: 12px;
+  color: #9ca3af;
+}
+
+.watch-list-item-title {
+  font-size: 14px;
+  font-weight: 600;
+  color: #1f2937;
+  line-height: 1.4;
+  margin-bottom: 0.375rem;
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+
+/* 可点击的标题样式 */
+.watch-list-item-title.clickable {
+  cursor: pointer;
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 0.5rem;
+  padding: 0.25rem 0;
+  border-radius: 4px;
+  transition: all 0.2s ease;
+}
+
+.watch-list-item-title.clickable:hover {
+  color: #1890ff;
+  background: rgba(24, 144, 255, 0.05);
+}
+
+/* 展开图标 */
+.expand-icon {
+  font-size: 10px;
+  color: #9ca3af;
+  flex-shrink: 0;
+  margin-top: 3px;
+  transition: all 0.2s ease;
+}
+
+.expand-icon.expanded {
+  color: #1890ff;
+  transform: rotate(0deg);
+}
+
+.watch-list-item-title.clickable:hover .expand-icon {
+  color: #1890ff;
+}
+
+.watch-list-item-summary {
+  font-size: 13px;
+  color: #6b7280;
+  line-height: 1.4;
+  margin-bottom: 0.75rem;
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+
+/* 展开后的详细内容区域 */
+.watch-list-item-details {
+  max-height: 0;
+  overflow: hidden;
+  transition: max-height 0.3s ease, opacity 0.3s ease, padding 0.3s ease;
+  opacity: 0;
+  background: #f8fafc;
+  border-radius: 8px;
+  margin: 0 -0.5rem;
+}
+
+.watch-list-item-details.show {
+  max-height: 1000px;
+  opacity: 1;
+  padding: 0.75rem;
+  margin: 0 -0.5rem 0.75rem;
+}
+
+/* 展开状态下的卡片样式 */
+.watch-list-item.expanded {
+  border-color: #1890ff;
+  box-shadow: 0 2px 12px rgba(24, 144, 255, 0.15);
+}
+
+/* 详情区块标题 */
+.details-section-title {
+  font-size: 12px;
+  font-weight: 600;
+  color: #374151;
+  margin-bottom: 0.5rem;
+  display: flex;
+  align-items: center;
+  gap: 0.375rem;
+}
+
+/* 详细内容 */
+.watch-list-item-content {
+  margin-bottom: 0.75rem;
+}
+
+.watch-list-item-content p {
+  font-size: 13px;
+  color: #4b5563;
+  line-height: 1.6;
+  margin: 0;
+}
+
+/* 标签列表 */
+.watch-list-item-tags {
+  margin-bottom: 0.75rem;
+}
+
+.details-tags-list {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.375rem;
+}
+
+.details-tag {
+  font-size: 11px;
+  padding: 3px 8px;
+  background: #e0f2fe;
+  color: #0284c7;
+  border-radius: 4px;
+  font-weight: 500;
+}
+
+/* 市场影响 */
+.watch-list-item-impact {
+  margin-bottom: 0.75rem;
+}
+
+.watch-list-item-impact p {
+  font-size: 13px;
+  color: #4b5563;
+  line-height: 1.6;
+  margin: 0;
+  padding: 0.5rem;
+  background: #fef3c7;
+  border-radius: 6px;
+  border-left: 3px solid #f59e0b;
+}
+
+/* 相关股票 */
+.watch-list-item-stocks {
+  margin-bottom: 0.5rem;
+}
+
+.details-stocks-list {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+}
+
+.details-stock {
+  font-size: 12px;
+  padding: 4px 10px;
+  background: #f3f4f6;
+  border-radius: 6px;
+  display: flex;
+  align-items: center;
+  gap: 0.375rem;
+  font-weight: 500;
+  color: #374151;
+}
+
+.stock-change {
+  font-size: 11px;
+  font-weight: 600;
+  padding: 1px 4px;
+  border-radius: 3px;
+}
+
+.stock-change.up {
+  color: #ef4444;
+  background: rgba(239, 68, 68, 0.1);
+}
+
+.stock-change.down {
+  color: #10b981;
+  background: rgba(16, 185, 129, 0.1);
+}
+
+.watch-list-item-footer {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.watch-list-item-source {
+  font-size: 12px;
+  color: #9ca3af;
+}
+
+.watch-list-item-unwatch {
+  font-size: 12px;
+  color: #ef4444;
+  background: transparent;
+  border: none;
+  cursor: pointer;
+  padding: 2px 6px;
+  border-radius: 4px;
+  transition: all 0.2s ease;
+}
+
+.watch-list-item-unwatch:hover {
+  background: rgba(239, 68, 68, 0.1);
+}
+
+/* 资讯卡片关注按钮 - 简洁无框设计 */
+.news-watch-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.25rem;
+  margin-top: 0.75rem;
+  padding: 0;
+  background: transparent;
+  border: none;
+  font-size: 12px;
+  color: #94a3b8;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  opacity: 0.7;
+}
+
+.news-watch-btn:hover {
+  color: #f59e0b;
+  opacity: 1;
+  transform: scale(1.05);
+}
+
+.news-watch-btn.watched {
+  background: transparent;
+  border: none;
+  color: #f59e0b;
+  opacity: 1;
+}
+
+.news-watch-btn.watched:hover {
+  color: #d97706;
+  transform: scale(1.05);
+}
+
+.watch-btn-icon {
+  font-size: 14px;
+  line-height: 1;
+}
+
+.watch-btn-text {
+  font-weight: 500;
+}
+
+/* 深色模式下的特别关注样式 */
+.dark-mode .watch-list-toggle-btn {
+  background: transparent;
+  border: none;
+  color: #94a3b8;
+}
+
+.dark-mode .watch-list-toggle-btn:hover {
+  color: #fbbf24;
+  background: rgba(251, 191, 36, 0.1);
+}
+
+.dark-mode .watch-list-toggle-btn.active {
+  background: rgba(251, 191, 36, 0.2);
+  color: #fbbf24;
+}
+
+.dark-mode .watch-list-count {
+  background: rgba(251, 191, 36, 0.2);
+  color: #fbbf24;
+}
+
+.dark-mode .watch-list-toggle-btn.active .watch-list-count {
+  background: rgba(251, 191, 36, 0.3);
+  color: #fbbf24;
+}
+
+.dark-mode .watch-list-panel {
+  background: #1e293b;
+  border-left-color: #334155;
+}
+
+.dark-mode .watch-list-header {
+  background: linear-gradient(135deg, #451a03 0%, #78350f 100%);
+}
+
+.dark-mode .watch-list-title {
+  color: #fcd34d;
+}
+
+.dark-mode .watch-list-close {
+  background: rgba(255, 255, 255, 0.1);
+  color: #cbd5e1;
+}
+
+.dark-mode .watch-list-close:hover {
+  background: rgba(255, 255, 255, 0.2);
+}
+
+.dark-mode .watch-list-item {
+  background: #334155;
+  border-color: #475569;
+}
+
+.dark-mode .watch-list-item:hover {
+  border-color: #f59e0b;
+}
+
+.dark-mode .watch-list-item-title {
+  color: #f1f5f9;
+}
+
+.dark-mode .watch-list-item-summary {
+  color: #94a3b8;
+}
+
+/* 深色模式下的展开详情样式 */
+.dark-mode .watch-list-item-title.clickable:hover {
+  color: #60a5fa;
+  background: rgba(96, 165, 250, 0.1);
+}
+
+.dark-mode .expand-icon {
+  color: #64748b;
+}
+
+.dark-mode .expand-icon.expanded {
+  color: #60a5fa;
+}
+
+.dark-mode .watch-list-item-title.clickable:hover .expand-icon {
+  color: #60a5fa;
+}
+
+.dark-mode .watch-list-item-details {
+  background: #1e293b;
+}
+
+.dark-mode .watch-list-item.expanded {
+  border-color: #60a5fa;
+  box-shadow: 0 2px 12px rgba(96, 165, 250, 0.2);
+}
+
+.dark-mode .details-section-title {
+  color: #e2e8f0;
+}
+
+.dark-mode .watch-list-item-content p {
+  color: #cbd5e1;
+}
+
+.dark-mode .details-tag {
+  background: #0c4a6e;
+  color: #7dd3fc;
+}
+
+.dark-mode .watch-list-item-impact p {
+  color: #cbd5e1;
+  background: #451a03;
+  border-left-color: #fbbf24;
+}
+
+.dark-mode .details-stock {
+  background: #374151;
+  color: #e2e8f0;
+}
+
+.dark-mode .news-watch-btn {
+  background: transparent;
+  border: none;
+  color: #64748b;
+}
+
+.dark-mode .news-watch-btn:hover {
+  background: transparent;
+  color: #fbbf24;
+}
+
+/* 响应式样式 */
+@media (max-width: 1024px) {
+  .market-news.split-view .news-main-panel {
+    flex: 0 0 60%;
+  }
+
+  .watch-list-panel {
+    flex: 0 0 40%;
+  }
+}
+
+@media (max-width: 768px) {
+  .market-news.split-view .news-main-panel {
+    flex: 1;
+  }
+
+  .watch-list-panel {
+    position: fixed;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    width: 85%;
+    max-width: 360px;
+    z-index: 1000;
+    border-left: none;
+    box-shadow: -4px 0 20px rgba(0, 0, 0, 0.15);
+  }
+
+  .watch-list-toggle-btn {
+    padding: 0.375rem 0.625rem;
+  }
+
+  .watch-list-text {
+    display: none;
   }
 }

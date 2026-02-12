@@ -13,9 +13,10 @@ const ImportanceStars = ({ level }) => {
   return <div className="importance-stars" title={`重要等级：${level}星`}>{stars}</div>;
 };
 
-const NewsCard = ({ news, isFirst, isExpanded, onToggle }) => {
+const NewsCard = ({ news, isFirst, isExpanded, onToggle, onToggleWatch, isNewsWatched }) => {
   const categoryConfig = CATEGORY_CONFIG[news.category];
   const importanceLevel = news.importance_level || (news.is_important ? 3 : 2);
+  const isWatched = isNewsWatched?.(news.id);
 
   return (
     <div
@@ -95,6 +96,21 @@ const NewsCard = ({ news, isFirst, isExpanded, onToggle }) => {
               <span key={index} className="stock-tag">{stock}</span>
             ))}
           </div>
+        )}
+
+        {/* 关注按钮 */}
+        {onToggleWatch && (
+          <button
+            className={`news-watch-btn ${isWatched ? 'watched' : ''}`}
+            onClick={(e) => {
+              e.stopPropagation();
+              onToggleWatch(news);
+            }}
+            title={isWatched ? '取消关注' : '添加关注'}
+          >
+            <span className="watch-btn-icon">{isWatched ? '⭐' : '☆'}</span>
+            <span className="watch-btn-text">{isWatched ? '已关注' : '关注'}</span>
+          </button>
         )}
       </div>
     </div>

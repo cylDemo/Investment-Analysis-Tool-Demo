@@ -104,7 +104,10 @@ body {
 }
 
 .metal-selector-container {
-  margin-bottom: 2rem;
+  margin-top: 2rem;
+  margin-bottom: 0;
+  margin-left: 2rem;
+  margin-right: 2rem;
   min-height: 120px; /* 固定最小高度，避免加载时抖动 */
 }
 
@@ -147,7 +150,9 @@ body {
 }
 
 .metal-detail-container {
-  margin-top: 2rem;
+  margin-top: 0;
+  margin-left: 2rem;
+  margin-right: 2rem;
   padding: 2rem;
   background: rgba(255, 255, 255, 0.1);
   border-radius: 16px;
@@ -369,22 +374,30 @@ body {
 
 .main {
   flex: 1;
-  padding: 2rem;
+  padding: 3rem 2rem;
   max-width: 1200px;
   margin: 0 auto;
   width: 100%;
 }
 
+/* 市场资讯页面包装器 - 抵消 .main 的 padding */
+.news-page-wrapper {
+  margin: -3rem -2rem;
+  width: calc(100% + 4rem);
+}
+
 .search-page {
   background-color: white;
   border-radius: 8px;
-  padding: 2rem;
+  padding: 0.5rem 0;
   box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
 }
 
 .tab-selector {
   display: flex;
-  margin-bottom: 2rem;
+  margin-bottom: 0.5rem;
+  margin-left: 2rem;
+  margin-right: 2rem;
   border-bottom: 1px solid #e2e8f0;
 }
 
@@ -411,7 +424,9 @@ body {
 .search-container {
   display: flex;
   gap: 1rem;
+  margin-top: 2rem;
   margin-bottom: 2rem;
+  padding: 0 2rem;
 }
 
 .code-input {
@@ -459,6 +474,7 @@ body {
 
 .example-codes {
   margin-top: 1.5rem;
+  padding: 0 2rem;
 }
 
 .example-codes h3 {
@@ -1306,15 +1322,55 @@ body {
 
 @media (max-width: 768px) {
   .main {
-    padding: 1rem;
+    padding: 2rem 1rem;
+  }
+
+  /* 市场资讯页面包装器 - 移动端抵消 .main 的 padding */
+  .news-page-wrapper {
+    margin: -2rem -1rem;
+    width: calc(100% + 2rem);
   }
 
   .search-page, .detail-page {
-    padding: 1.5rem;
+    padding: 0.25rem 0;
   }
 
   .search-container {
     flex-direction: column;
+    margin-top: 1rem;
+    padding: 0 1rem;
+  }
+
+  .example-codes {
+    padding: 0 1rem;
+  }
+
+  .investment-recommendation {
+    margin-left: 1rem;
+    margin-right: 1rem;
+  }
+
+  .carousel-section {
+    margin-left: 1rem;
+    margin-right: 1rem;
+  }
+
+  .metal-selector-container {
+    margin-top: 1rem;
+    margin-bottom: 0;
+    margin-left: 1rem;
+    margin-right: 1rem;
+  }
+
+  .metal-detail-container {
+    margin-top: 0;
+    margin-left: 1rem;
+    margin-right: 1rem;
+  }
+
+  .tab-selector {
+    margin-left: 1rem;
+    margin-right: 1rem;
   }
 
   .basic-info, .indicator-grid {
@@ -1438,6 +1494,8 @@ body {
 /* 投资推荐功能样式 */
 .investment-recommendation {
   margin-top: 2rem;
+  margin-left: 2rem;
+  margin-right: 2rem;
   padding: 1.5rem;
   background-color: #f0f8ff;
   border-radius: 8px;
@@ -1622,6 +1680,8 @@ body {
 /* 投资排行榜轮播卡片样式 */
 .carousel-section {
   margin-top: 3rem;
+  margin-left: 2rem;
+  margin-right: 2rem;
   padding: 1.5rem;
   background-color: #f8fafc;
   border-radius: 8px;
@@ -1640,6 +1700,7 @@ body {
   position: relative;
   overflow: hidden;
   border-radius: 8px;
+  width: 100%;
 }
 
 .carousel-wrapper {

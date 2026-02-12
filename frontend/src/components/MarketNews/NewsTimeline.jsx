@@ -1,7 +1,15 @@
+/*
+ * @Author: error: error: git config user.name & please set dead value or install git && error: git config user.email & please set dead value or install git & please set dead value or install git
+ * @Date: 2026-02-10 17:11:20
+ * @LastEditors: error: error: git config user.name & please set dead value or install git && error: git config user.email & please set dead value or install git & please set dead value or install git
+ * @LastEditTime: 2026-02-12 13:56:01
+ * @FilePath: \Investment_Analysis_Tool_Demo\frontend\src\components\MarketNews\NewsTimeline.jsx
+ * @Description: 这是默认设置,请设置`customMade`, 打开koroFileHeader查看配置 进行设置: https://github.com/OBKoro1/koro1FileHeader/wiki/%E9%85%8D%E7%BD%AE
+ */
 import { useEffect, useRef, useState } from 'react';
 import NewsCard from './NewsCard';
 
-const NewsTimeline = ({ newsList, loading, hasMore, onLoadMore, onRefresh, refreshing }) => {
+const NewsTimeline = ({ newsList, loading, hasMore, onLoadMore, onRefresh, refreshing, onToggleWatch, isNewsWatched }) => {
   const observerRef = useRef(null);
   const loadMoreRef = useRef(null);
   const [selectedNews, setSelectedNews] = useState(null);
@@ -132,6 +140,8 @@ const NewsTimeline = ({ newsList, loading, hasMore, onLoadMore, onRefresh, refre
                     onToggle={() => {
                       setSelectedNews(selectedNews?.id === news.id ? null : news);
                     }}
+                    onToggleWatch={onToggleWatch}
+                    isNewsWatched={isNewsWatched}
                   />
                 ))}
               </div>

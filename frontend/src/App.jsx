@@ -1155,7 +1155,9 @@ function App() {
             
             {/* 市场资讯页面 */}
             {activeNavTab === 'news' && (
-              <MarketNews />
+              <div className="news-page-wrapper">
+                <MarketNews />
+              </div>
             )}
 
             {/* 设置页面 - 独立于showDetail条件 */}

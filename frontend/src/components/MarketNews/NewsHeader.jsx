@@ -121,20 +121,7 @@ const NewsHeader = ({ showImportantOnly, onToggleImportant, selectedCategory, on
       <div className="header-accent-bar"></div>
       
       <div className="news-header-main">
-        {/* 左侧：标题和日期 */}
-        <div className="header-left">
-          <div className="header-brand">
-            <span className="brand-icon">📰</span>
-            <h1 className="brand-title">市场资讯</h1>
-            <span className="brand-badge">实时</span>
-          </div>
-          <div className="header-date">
-            <span className="date-full">{currentDate.full}</span>
-            <span className="date-weekday">{currentDate.weekday}</span>
-          </div>
-        </div>
-        
-        {/* 右侧：筛选器 */}
+        {/* 筛选器区域 */}
         <div className="news-filters">
           {/* 搜索输入框 */}
           <div className={`search-box ${isSearchFocused ? 'focused' : ''}`}>
@@ -308,17 +295,18 @@ const NewsHeader = ({ showImportantOnly, onToggleImportant, selectedCategory, on
             )}
           </div>
 
-          {/* 只看重要开关 */}
-          <div className="important-filter">
-            <span className="filter-label">只看重要</span>
-            <button 
-              className={`toggle-switch ${showImportantOnly ? 'active' : ''}`}
-              onClick={onToggleImportant}
-              aria-label="只看重要"
-            >
-              <span className="toggle-slider"></span>
-            </button>
-          </div>
+        </div>
+
+        {/* 只看重要开关 - 移到最右侧 */}
+        <div className="important-filter">
+          <span className="filter-label">只看重要</span>
+          <button 
+            className={`toggle-switch ${showImportantOnly ? 'active' : ''}`}
+            onClick={onToggleImportant}
+            aria-label="只看重要"
+          >
+            <span className="toggle-slider"></span>
+          </button>
         </div>
       </div>
 

@@ -2,6 +2,7 @@ import { useState, useEffect, useCallback, useRef, useMemo } from 'react';
 import NewsHeader from './NewsHeader';
 import NewsTimeline from './NewsTimeline';
 import NewsEmpty from './NewsEmpty';
+import WatchListPanel from './WatchListPanel';
 import { fetchNewsList } from '../../services/newsApi';
 import './MarketNews.css';
 
@@ -20,6 +21,11 @@ const MarketNews = () => {
   const [selectedDate, setSelectedDate] = useState(null);
   const [searchKeyword, setSearchKeyword] = useState('');
   const [refreshing, setRefreshing] = useState(false);
+  const [showWatchList, setShowWatchList] = useState(false);
+  const [watchedNews, setWatchedNews] = useState(() => {
+    const saved = localStorage.getItem('watchedNews');
+    return saved ? JSON.parse(saved) : [];
+  });
   const loadingRef = useRef(false);
 
   // 获取可用的日期列表
@@ -97,6 +103,28 @@ const MarketNews = () => {
     localStorage.setItem('newsShowImportantOnly', showImportantOnly.toString());
   }, [showImportantOnly]);
 
+  // 保存特别关注列表
+  useEffect(() => {
+    localStorage.setItem('watchedNews', JSON.stringify(watchedNews));
+  }, [watchedNews]);
+
+  // 添加/移除特别关注
+  const toggleWatchNews = useCallback((news) => {
+    setWatchedNews(prev => {
+      const exists = prev.find(item => item.id === news.id);
+      if (exists) {
+        return prev.filter(item => item.id !== news.id);
+      } else {
+        return [...prev, { ...news, watchedAt: new Date().toISOString() }];
+      }
+    });
+  }, []);
+
+  // 检查是否已关注
+  const isNewsWatched = useCallback((newsId) => {
+    return watchedNews.some(item => item.id === newsId);
+  }, [watchedNews]);
+
   // 下拉刷新
   const handleRefresh = async () => {
     setRefreshing(true);
@@ -143,56 +171,115 @@ const MarketNews = () => {
     setFilteredNewsList(filtered);
   }, [searchKeyword, selectedDate, newsList]);
 
+  // 获取当前日期
+  const getCurrentDate = () => {
+    const now = new Date();
+    const year = now.getFullYear();
+    const month = String(now.getMonth() + 1).padStart(2, '0');
+    const day = String(now.getDate()).padStart(2, '0');
+    const weekdays = ['周日', '周一', '周二', '周三', '周四', '周五', '周六'];
+    const weekday = weekdays[now.getDay()];
+    return {
+      full: `${year}年${month}月${day}日`,
+      weekday
+    };
+  };
+
+  const currentDate = getCurrentDate();
+
   return (
-    <div className="market-news">
-      <NewsHeader
-        showImportantOnly={showImportantOnly}
-        onToggleImportant={() => setShowImportantOnly(!showImportantOnly)}
-        selectedCategory={selectedCategory}
-        onSelectCategory={setSelectedCategory}
-        searchKeyword={searchKeyword}
-        onSearchChange={setSearchKeyword}
-        selectedDate={selectedDate}
-        onSelectDate={setSelectedDate}
-        availableDates={availableDates}
-      />
-
-      {error ? (
-        <NewsEmpty type="error" onRetry={handleRefresh} />
-      ) : initialLoading ? (
-        <div className="news-initial-loading">
-          <div className="loading-spinner"></div>
-          <span>正在加载资讯...</span>
+    <div className={`market-news ${showWatchList ? 'split-view' : ''}`}>
+      {/* 页面标题区域 - 移到最顶部 */}
+      <div className="market-news-page-header">
+        <div className="page-header-content">
+          <div className="page-header-left">
+            <div className="page-header-brand">
+              <span className="page-brand-icon">📰</span>
+              <h1 className="page-brand-title">市场资讯</h1>
+              <span className="page-brand-badge">实时</span>
+            </div>
+            <div className="page-header-date">
+              <span className="page-date-full">{currentDate.full}</span>
+              <span className="page-date-weekday">{currentDate.weekday}</span>
+            </div>
+          </div>
+          <div className="page-header-right">
+            <button
+              className={`watch-list-toggle-btn ${showWatchList ? 'active' : ''}`}
+              onClick={() => setShowWatchList(!showWatchList)}
+            >
+              <span className="watch-list-icon">⭐</span>
+              <span className="watch-list-text">我的关注</span>
+              {watchedNews.length > 0 && (
+                <span className="watch-list-count">{watchedNews.length}</span>
+              )}
+            </button>
+          </div>
         </div>
-      ) : filteredNewsList.length === 0 ? (
-        <NewsEmpty
-          type={searchKeyword ? 'search' : selectedDate ? 'date' : (showImportantOnly ? 'filter' : 'empty')}
-          onViewAll={() => {
-            setSearchKeyword('');
-            setShowImportantOnly(false);
-            setSelectedDate(null);
-          }}
-          onRefresh={handleRefresh}
-          searchKeyword={searchKeyword}
-          selectedDate={selectedDate}
-        />
-      ) : (
-        <NewsTimeline
-          newsList={filteredNewsList}
-          loading={loading}
-          hasMore={hasMore && !searchKeyword}
-          onLoadMore={handleLoadMore}
-          onRefresh={handleRefresh}
-          refreshing={refreshing}
-        />
-      )}
+      </div>
 
-      {loading && newsList.length > 0 && !searchKeyword && (
-        <div className="news-loading-more">
-          <div className="loading-spinner"></div>
-          <span>加载中...</span>
+      <div className="market-news-content">
+        <div className="news-main-panel">
+          <NewsHeader
+            showImportantOnly={showImportantOnly}
+            onToggleImportant={() => setShowImportantOnly(!showImportantOnly)}
+            selectedCategory={selectedCategory}
+            onSelectCategory={setSelectedCategory}
+            searchKeyword={searchKeyword}
+            onSearchChange={setSearchKeyword}
+            selectedDate={selectedDate}
+            onSelectDate={setSelectedDate}
+            availableDates={availableDates}
+          />
+
+          {error ? (
+            <NewsEmpty type="error" onRetry={handleRefresh} />
+          ) : initialLoading ? (
+            <div className="news-initial-loading">
+              <div className="loading-spinner"></div>
+              <span>正在加载资讯...</span>
+            </div>
+          ) : filteredNewsList.length === 0 ? (
+            <NewsEmpty
+              type={searchKeyword ? 'search' : selectedDate ? 'date' : (showImportantOnly ? 'filter' : 'empty')}
+              onViewAll={() => {
+                setSearchKeyword('');
+                setShowImportantOnly(false);
+                setSelectedDate(null);
+              }}
+              onRefresh={handleRefresh}
+              searchKeyword={searchKeyword}
+              selectedDate={selectedDate}
+            />
+          ) : (
+            <NewsTimeline
+              newsList={filteredNewsList}
+              loading={loading}
+              hasMore={hasMore && !searchKeyword}
+              onLoadMore={handleLoadMore}
+              onRefresh={handleRefresh}
+              refreshing={refreshing}
+              onToggleWatch={toggleWatchNews}
+              isNewsWatched={isNewsWatched}
+            />
+          )}
+
+          {loading && newsList.length > 0 && !searchKeyword && (
+            <div className="news-loading-more">
+              <div className="loading-spinner"></div>
+              <span>加载中...</span>
+            </div>
+          )}
         </div>
-      )}
+
+        {showWatchList && (
+          <WatchListPanel
+            watchedNews={watchedNews}
+            onToggleWatch={toggleWatchNews}
+            onClose={() => setShowWatchList(false)}
+          />
+        )}
+      </div>
     </div>
   );
 };
