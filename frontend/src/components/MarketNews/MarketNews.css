@@ -5,6 +5,12 @@
   padding-bottom: 2rem;
 }
 
+/* 未登录时禁止滚动 */
+.market-news.login-required {
+  overflow: hidden;
+  height: 100vh;
+}
+
 /* ========== 页面顶部标题区域（移到search-page位置） ========== */
 .market-news-page-header {
   background: linear-gradient(135deg, #fff 0%, #f8fafc 100%);
