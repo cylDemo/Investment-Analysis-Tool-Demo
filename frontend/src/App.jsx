@@ -6,6 +6,8 @@ import MetalDetail from './components/MetalDetail';
 import Login from './components/Login';
 import Settings from './components/Settings';
 import MarketNews from './components/MarketNews';
+import LoginPromptModal from './components/LoginPromptModal';
+import LoginOverlay from './components/LoginOverlay';
 import logo from './assets/Logo_2.png';
 
 function App() {
@@ -74,10 +76,15 @@ function App() {
   const [showLogoutModal, setShowLogoutModal] = useState(false);
   // 登出成功消息提示状态
   const [showLogoutToast, setShowLogoutToast] = useState(false);
-  
+  // 登录提示弹窗状态
+  const [showLoginPrompt, setShowLoginPrompt] = useState(false);
+  // 是否显示登录页面
+  const [showLoginPage, setShowLoginPage] = useState(false);
+
   // 登录成功处理
   const handleLoginSuccess = () => {
     setIsLoggedIn(true);
+    setShowLoginPage(false);
     // 将登录状态保存到localStorage中
     localStorage.setItem('isLoggedIn', 'true');
   };
@@ -211,8 +218,23 @@ function App() {
     window.scrollTo({ top: 0, behavior: 'smooth' });
   };
 
+  // 处理排行榜卡片点击
+  const handleRankingCardClick = (searchCode, searchTab) => {
+    if (!isLoggedIn) {
+      setShowLoginPrompt(true);
+      return;
+    }
+    handleSearch(null, searchCode, searchTab);
+  };
+
   const handleInvestmentRecommendation = async () => {
     if (!recommendationCode) return;
+
+    // 未登录时显示登录提示
+    if (!isLoggedIn) {
+      setShowLoginPrompt(true);
+      return;
+    }
 
     setIsLoading(true);
     setRecommendationResult('');
@@ -255,7 +277,7 @@ function App() {
         </div>
       )}
       
-      {!isLoggedIn ? (
+      {showLoginPage ? (
         <Login onLoginSuccess={handleLoginSuccess} />
       ) : (
         <>
@@ -266,7 +288,7 @@ function App() {
                 <h1>IAT</h1>
               </div>
               <nav className="header-nav">
-                <button 
+                <button
                   className={`nav-tab ${activeNavTab === 'stock' ? 'active' : ''}`}
                   onClick={() => {
                     setActiveTab('stock');
@@ -359,8 +381,16 @@ function App() {
                 </button>
               </nav>
               <div className="header-actions">
-                {nickname && (
+                {isLoggedIn && nickname && (
                   <span className="header-nickname">{nickname}</span>
+                )}
+                {!isLoggedIn && (
+                  <button
+                    className="header-login-btn"
+                    onClick={() => setShowLoginPage(true)}
+                  >
+                    登录
+                  </button>
                 )}
                 <button
                   className={`theme-toggle ${darkMode ? 'active' : ''}`}
@@ -633,8 +663,55 @@ function App() {
                       )}
                       {recommendationResult && (
                         <div className="recommendation-result">
-                          <h4>推荐结果</h4>
-                          <div className="recommendation-content">{recommendationResult}</div>
+                          <div className="recommendation-header">
+                            <div className="recommendation-icon">
+                              <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                                <path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"/>
+                                <polyline points="3.27 6.96 12 12.01 20.73 6.96"/>
+                                <line x1="12" y1="22.08" x2="12" y2="12"/>
+                              </svg>
+                            </div>
+                            <h4>AI 投资分析报告</h4>
+                          </div>
+                          <div className="recommendation-content">
+                            {recommendationResult.split('\n').map((line, index) => {
+                              // 标题行
+                              if (line.match(/^基于.*的投资推荐$/)) {
+                                return (
+                                  <div key={index} className="recommendation-title-section">
+                                    <h3 className="recommendation-main-title">{line}</h3>
+                                  </div>
+                                );
+                              }
+                              // 数字标题 (1. 2. 3. 等)
+                              if (line.match(/^\d+\./)) {
+                                return (
+                                  <div key={index} className="recommendation-section-title">
+                                    {line}
+                                  </div>
+                                );
+                              }
+                              // 子项 (- 开头)
+                              if (line.trim().startsWith('-')) {
+                                const [label, value] = line.split(':').map(s => s.trim());
+                                return (
+                                  <div key={index} className="recommendation-item">
+                                    <span className="recommendation-label">{label.replace('-', '').trim()}</span>
+                                    <span className="recommendation-value">{value || ''}</span>
+                                  </div>
+                                );
+                              }
+                              // 空行
+                              if (line.trim() === '') {
+                                return <div key={index} className="recommendation-spacer"></div>;
+                              }
+                              // 普通文本
+                              return <div key={index} className="recommendation-text">{line}</div>;
+                            })}
+                          </div>
+                          <div className="recommendation-footer">
+                            <span className="recommendation-disclaimer">* 以上分析仅供参考，投资有风险，入市需谨慎</span>
+                          </div>
                         </div>
                       )}
                     </div>
@@ -651,7 +728,7 @@ function App() {
                             {activeNavTab === 'stock' && (
                               <>
                                 <div className="rank-card" onClick={() => {
-                                  handleSearch(null, '600519', 'stock');
+                                  handleRankingCardClick('600519', 'stock');
                                 }}>
                                   <div className="card-header">
                                     <h4>贵州茅台 (600519)</h4>
@@ -680,7 +757,7 @@ function App() {
                                 </div>
 
                                 <div className="rank-card" onClick={() => {
-                                  handleSearch(null, '000001', 'stock');
+                                  handleRankingCardClick('000001', 'stock');
                                 }}>
                                   <div className="card-header">
                                     <h4>平安银行 (000001)</h4>
@@ -710,7 +787,7 @@ function App() {
 
                                 {/* 新增股票卡片 1 */}
                                 <div className="rank-card" onClick={() => {
-                                  handleSearch(null, '000858', 'stock');
+                                  handleRankingCardClick('000858', 'stock');
                                 }}>
                                   <div className="card-header">
                                     <h4>五粮液 (000858)</h4>
@@ -740,7 +817,7 @@ function App() {
 
                                 {/* 新增股票卡片 2 */}
                                 <div className="rank-card" onClick={() => {
-                                  handleSearch(null, '601318', 'stock');
+                                  handleRankingCardClick('601318', 'stock');
                                 }}>
                                   <div className="card-header">
                                     <h4>中国平安 (601318)</h4>
@@ -770,7 +847,7 @@ function App() {
 
                                 {/* 复制所有卡片到末尾，实现无缝轮播 */}
                                 <div className="rank-card" onClick={() => {
-                                  handleSearch(null, '600519', 'stock');
+                                  handleRankingCardClick('600519', 'stock');
                                 }}>
                                   <div className="card-header">
                                     <h4>贵州茅台 (600519)</h4>
@@ -799,7 +876,7 @@ function App() {
                                 </div>
 
                                 <div className="rank-card" onClick={() => {
-                                  handleSearch(null, '000001', 'stock');
+                                  handleRankingCardClick('000001', 'stock');
                                 }}>
                                   <div className="card-header">
                                     <h4>平安银行 (000001)</h4>
@@ -828,7 +905,7 @@ function App() {
                                 </div>
 
                                 <div className="rank-card" onClick={() => {
-                                  handleSearch(null, '000858', 'stock');
+                                  handleRankingCardClick('000858', 'stock');
                                 }}>
                                   <div className="card-header">
                                     <h4>五粮液 (000858)</h4>
@@ -857,7 +934,7 @@ function App() {
                                 </div>
 
                                 <div className="rank-card" onClick={() => {
-                                  handleSearch(null, '601318', 'stock');
+                                  handleRankingCardClick('601318', 'stock');
                                 }}>
                                   <div className="card-header">
                                     <h4>中国平安 (601318)</h4>
@@ -890,7 +967,7 @@ function App() {
                             {activeNavTab === 'fund' && (
                               <>
                                 <div className="rank-card" onClick={() => {
-                                  handleSearch(null, '110022', 'fund');
+                                  handleRankingCardClick('110022', 'fund');
                                 }}>
                                   <div className="card-header">
                                     <h4>易方达消费行业股票 (110022)</h4>
@@ -919,7 +996,7 @@ function App() {
                                 </div>
 
                                 <div className="rank-card" onClick={() => {
-                                  handleSearch(null, '000001', 'fund');
+                                  handleRankingCardClick('000001', 'fund');
                                 }}>
                                   <div className="card-header">
                                     <h4>华夏成长混合 (000001)</h4>
@@ -949,7 +1026,7 @@ function App() {
 
                                 {/* 新增基金卡片 1 */}
                                 <div className="rank-card" onClick={() => {
-                                  handleSearch(null, '001475', 'fund');
+                                  handleRankingCardClick('001475', 'fund');
                                 }}>
                                   <div className="card-header">
                                     <h4>易方达国防军工混合 (001475)</h4>
@@ -979,7 +1056,7 @@ function App() {
 
                                 {/* 新增基金卡片 2 */}
                                 <div className="rank-card" onClick={() => {
-                                  handleSearch(null, '005827', 'fund');
+                                  handleRankingCardClick('005827', 'fund');
                                 }}>
                                   <div className="card-header">
                                     <h4>易方达蓝筹精选混合 (005827)</h4>
@@ -1009,7 +1086,7 @@ function App() {
 
                                 {/* 复制所有卡片到末尾，实现无缝轮播 */}
                                 <div className="rank-card" onClick={() => {
-                                  handleSearch(null, '110022', 'fund');
+                                  handleRankingCardClick('110022', 'fund');
                                 }}>
                                   <div className="card-header">
                                     <h4>易方达消费行业股票 (110022)</h4>
@@ -1038,7 +1115,7 @@ function App() {
                                 </div>
 
                                 <div className="rank-card" onClick={() => {
-                                  handleSearch(null, '000001', 'fund');
+                                  handleRankingCardClick('000001', 'fund');
                                 }}>
                                   <div className="card-header">
                                     <h4>华夏成长混合 (000001)</h4>
@@ -1067,7 +1144,7 @@ function App() {
                                 </div>
 
                                 <div className="rank-card" onClick={() => {
-                                  handleSearch(null, '001475', 'fund');
+                                  handleRankingCardClick('001475', 'fund');
                                 }}>
                                   <div className="card-header">
                                     <h4>易方达国防军工混合 (001475)</h4>
@@ -1096,7 +1173,7 @@ function App() {
                                 </div>
 
                                 <div className="rank-card" onClick={() => {
-                                  handleSearch(null, '005827', 'fund');
+                                  handleRankingCardClick('005827', 'fund');
                                 }}>
                                   <div className="card-header">
                                     <h4>易方达蓝筹精选混合 (005827)</h4>
@@ -1135,9 +1212,9 @@ function App() {
 
                 {/* 贵金属数据显示 */}
                 {activeNavTab === 'metal' && ['gold', 'silver', 'copper', 'platinum', 'lead'].includes(activeTab) && (
-                  <div className="metal-detail-container">
+                  <div className="metal-detail-container" style={{ position: 'relative' }}>
                     {data ? (
-                      <MetalDetail data={data} />
+                      <MetalDetail data={data} isLoggedIn={isLoggedIn} onLogin={() => setShowLoginPage(true)} />
                     ) : (
                       <div className="metal-detail-placeholder">
                         <div className="placeholder-content">
@@ -1168,7 +1245,7 @@ function App() {
                     )}
                     
                     {(activeTab === 'gold' || activeTab === 'silver' || activeTab === 'copper' || activeTab === 'platinum' || activeTab === 'lead') && data && (
-                      <MetalDetail data={data} />
+                      <MetalDetail data={data} isLoggedIn={isLoggedIn} onLogin={() => setShowLoginPage(true)} />
                     )}
                   </div>
                 )}
@@ -1177,8 +1254,8 @@ function App() {
             
             {/* 市场资讯页面 */}
             {activeNavTab === 'news' && (
-              <div className="news-page-wrapper">
-                <MarketNews />
+              <div className="news-page-wrapper" style={{ position: 'relative' }}>
+                <MarketNews isLoggedIn={isLoggedIn} onLogin={() => setShowLoginPage(true)} />
               </div>
             )}
 
@@ -1200,6 +1277,16 @@ function App() {
           <footer className="footer">
             <p>Investment Analysis Tool &copy; 2026</p>
           </footer>
+
+          {/* 登录提示弹窗 */}
+          <LoginPromptModal
+            isOpen={showLoginPrompt}
+            onClose={() => setShowLoginPrompt(false)}
+            onLogin={() => {
+              setShowLoginPrompt(false);
+              setShowLoginPage(true);
+            }}
+          />
         </>
       )}
     </div>

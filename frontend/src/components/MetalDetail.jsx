@@ -10,6 +10,7 @@ import {
   Tooltip,
   Legend
 } from 'chart.js';
+import LoginOverlay from './LoginOverlay';
 
 ChartJS.register(
   CategoryScale,
@@ -21,7 +22,7 @@ ChartJS.register(
   Legend
 );
 
-const MetalDetail = ({ data }) => {
+const MetalDetail = ({ data, isLoggedIn, onLogin }) => {
   // 获取所有可用的年份
   const years = Object.keys(data.history).sort().reverse();
   // 默认选择最新的年份
@@ -64,9 +65,9 @@ const MetalDetail = ({ data }) => {
   };
 
   return (
-    <div className="metal-detail">
+    <div className="metal-detail" style={{ position: 'relative' }}>
       <h2>{data.name} ({data.code})</h2>
-      
+
       <div className="basic-info">
         <div className="info-item">
           <span className="label">当前价格：</span>
@@ -125,6 +126,9 @@ const MetalDetail = ({ data }) => {
         </div>
         <Line data={getChartData()} options={chartOptions} />
       </div>
+
+      {/* 未登录时显示蒙层 */}
+      <LoginOverlay isVisible={!isLoggedIn} onLogin={onLogin} />
     </div>
   );
 };

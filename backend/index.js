@@ -821,6 +821,52 @@ const fundData = {
         { date: '2024-01-31', nav: 2.4100 }
       ]
     }
+  },
+  '005827': {
+    name: '易方达蓝筹精选混合',
+    code: '005827',
+    nav: 2.6580,
+    dayGrowth: 0.42,
+    weekGrowth: 1.85,
+    monthGrowth: 4.20,
+    yearGrowth: 16.20,
+    fundManager: '张坤',
+    description: '易方达蓝筹精选混合型证券投资基金是易方达基金管理有限公司旗下的一只混合型基金，成立于2018年9月。该基金主要投资于A股和港股市场的优质蓝筹股票，注重长期价值投资。基金经理张坤是中国基金行业的知名基金经理，以其深度研究和长期持有优质企业的投资风格著称。',
+    history: {
+      '2026': [
+        { date: '2026-01-31', nav: 2.6580 },
+        { date: '2026-01-15', nav: 2.6450 },
+        { date: '2026-01-01', nav: 2.6320 }
+      ],
+      '2025': [
+        { date: '2025-12-31', nav: 2.6200 },
+        { date: '2025-11-30', nav: 2.6050 },
+        { date: '2025-10-31', nav: 2.5900 },
+        { date: '2025-09-30', nav: 2.5750 },
+        { date: '2025-08-31', nav: 2.5600 },
+        { date: '2025-07-31', nav: 2.5450 },
+        { date: '2025-06-30', nav: 2.5300 },
+        { date: '2025-05-31', nav: 2.5150 },
+        { date: '2025-04-30', nav: 2.5000 },
+        { date: '2025-03-31', nav: 2.4850 },
+        { date: '2025-02-28', nav: 2.4700 },
+        { date: '2025-01-31', nav: 2.4550 }
+      ],
+      '2024': [
+        { date: '2024-12-31', nav: 2.4400 },
+        { date: '2024-11-30', nav: 2.4250 },
+        { date: '2024-10-31', nav: 2.4100 },
+        { date: '2024-09-30', nav: 2.3950 },
+        { date: '2024-08-31', nav: 2.3800 },
+        { date: '2024-07-31', nav: 2.3650 },
+        { date: '2024-06-30', nav: 2.3500 },
+        { date: '2024-05-31', nav: 2.3350 },
+        { date: '2024-04-30', nav: 2.3200 },
+        { date: '2024-03-31', nav: 2.3050 },
+        { date: '2024-02-29', nav: 2.2900 },
+        { date: '2024-01-31', nav: 2.2750 }
+      ]
+    }
   }
 };
 
@@ -1610,14 +1656,14 @@ function generateStockRecommendation(stock) {
   const industryAdvice = getIndustryAdvice(stock.industry);
   recommendation += `   - 行业建议: ${industryAdvice}\n\n`;
   
-  // 投资组合建议
-  recommendation += `3. 投资组合建议\n`;
+  // 投资评估
+  recommendation += `3. 投资评估\n`;
   recommendation += `   - 建议配置比例: ${getSuggestedAllocation(stock.industry)}\n`;
   recommendation += `   - 风险等级: ${getRiskLevel(stock)}\n`;
   recommendation += `   - 适合投资者: ${getSuitableInvestor(stock)}\n\n`;
   
-  // 组合基金推荐
-  recommendation += `4. 组合基金推荐\n`;
+  // 风险分化投资
+  recommendation += `4. 风险分化投资\n`;
   recommendation += `   - 目的: 平衡投资风险，优化资产配置\n`;
   recommendation += generatePortfolioRecommendation('stock', stock.industry);
   recommendation += `\n`;
@@ -1668,15 +1714,15 @@ function generateFundRecommendation(fund) {
   }
   recommendation += `   - 业绩建议: ${performanceAdvice}\n\n`;
   
-  // 基金组合建议
-  recommendation += `3. 基金组合建议\n`;
+  // 投资评估
+  recommendation += `3. 投资评估\n`;
   recommendation += `   - 核心-卫星配置策略:\n`;
   recommendation += `     * 核心配置: 宽基指数基金 (60-70%)\n`;
   recommendation += `     * 卫星配置: 行业主题基金 (20-30%)\n`;
   recommendation += `     * 防御配置: 债券基金 (10-20%)\n\n`;
   
-  // 组合基金推荐
-  recommendation += `4. 组合基金推荐\n`;
+  // 风险分化投资
+  recommendation += `4. 风险分化投资\n`;
   recommendation += `   - 目的: 平衡投资风险，优化资产配置\n`;
   recommendation += generatePortfolioRecommendation('fund', fund.name);
   recommendation += `\n`;
@@ -2647,6 +2693,82 @@ const newsData = [
     content: '港交所宣布优化互联互通机制，扩大港股通、沪深股通标的范围，纳入更多优质中小企业，进一步提升两地市场互联互通水平。同时，优化交易机制，提升交易效率，为投资者提供更多投资选择。',
     related_stocks: ['港交所', '互联互通', '港股通'],
     tags: ['港交所', '互联互通', '标的扩容']
+  },
+  // 2月12日资讯
+  {
+    id: 'news_202502121030_046',
+    timestamp: '2025-02-12T10:30:00+08:00',
+    time_display: '10:30',
+    category: 'policy',
+    category_name: '政策',
+    is_important: true,
+    importance_level: 5,
+    source: '央行',
+    title: '央行：保持流动性合理充裕 支持实体经济发展',
+    summary: '央行发布最新货币政策执行报告，表示将继续实施稳健的货币政策，保持流动性合理充裕，加大对实体经济的支持力度。',
+    content: '央行发布最新货币政策执行报告，表示将继续实施稳健的货币政策，保持流动性合理充裕，加大对实体经济的支持力度。报告强调，将综合运用多种货币政策工具，保持货币供应量和社会融资规模增速同名义经济增速基本匹配，为经济高质量发展营造良好的货币金融环境。',
+    related_stocks: ['银行板块', '券商板块'],
+    tags: ['货币政策', '流动性', '央行']
+  },
+  {
+    id: 'news_202502120915_047',
+    timestamp: '2025-02-12T09:15:00+08:00',
+    time_display: '09:15',
+    category: 'stock',
+    category_name: '股市',
+    is_important: true,
+    importance_level: 4,
+    source: '财联社',
+    title: 'A股开盘：三大指数集体高开 科技股领涨',
+    summary: '今日A股三大指数集体高开，沪指涨0.5%，深成指涨0.8%，创业板指涨1.2%。科技股集体走强，半导体、人工智能板块涨幅居前。',
+    content: '今日A股三大指数集体高开，沪指涨0.5%，深成指涨0.8%，创业板指涨1.2%。科技股集体走强，半导体、人工智能板块涨幅居前。市场成交额较昨日明显放大，北向资金净流入超50亿元。分析师表示，随着政策面持续向好，市场风险偏好有望进一步提升。',
+    related_stocks: ['半导体', '人工智能', '科技股'],
+    tags: ['A股', '开盘', '科技股']
+  },
+  {
+    id: 'news_202502121400_048',
+    timestamp: '2025-02-12T14:00:00+08:00',
+    time_display: '14:00',
+    category: 'company',
+    category_name: '公司',
+    is_important: true,
+    importance_level: 4,
+    source: '公司公告',
+    title: '比亚迪：1月新能源汽车销量同比增长47%',
+    summary: '比亚迪发布1月销量数据，新能源汽车销量达20.1万辆，同比增长47%，海外市场销量突破3万辆。',
+    content: '比亚迪发布1月销量数据，新能源汽车销量达20.1万辆，同比增长47%，海外市场销量突破3万辆，创历史新高。公司表示，将继续加大海外市场拓展力度，提升全球市场份额。同时，新车型将于本季度陆续上市，有望进一步推动销量增长。',
+    related_stocks: ['比亚迪', '新能源汽车', '锂电池'],
+    tags: ['销量', '新能源车', '比亚迪']
+  },
+  {
+    id: 'news_202502121100_049',
+    timestamp: '2025-02-12T11:00:00+08:00',
+    time_display: '11:00',
+    category: 'metal',
+    category_name: '黄金',
+    is_important: false,
+    importance_level: 3,
+    source: '金十数据',
+    title: '国际金价创三个月新高 避险需求持续升温',
+    summary: '国际金价突破2050美元/盎司，创三个月新高。地缘政治风险和市场不确定性推动避险需求持续升温。',
+    content: '国际金价突破2050美元/盎司，创三个月新高。地缘政治风险和市场不确定性推动避险需求持续升温。分析师预计，在全球经济不确定性增加的背景下，黄金作为避险资产的吸引力将持续增强，金价有望继续走高。',
+    related_stocks: ['黄金概念', '紫金矿业', '山东黄金'],
+    tags: ['黄金', '避险', '金价上涨']
+  },
+  {
+    id: 'news_202502120945_050',
+    timestamp: '2025-02-12T09:45:00+08:00',
+    time_display: '09:45',
+    category: 'fund',
+    category_name: '基金',
+    is_important: false,
+    importance_level: 3,
+    source: '中国基金报',
+    title: '多只主动权益基金年内收益率超20%',
+    summary: '今年以来，多只主动权益基金表现亮眼，年内收益率超过20%，科技成长风格基金表现尤为突出。',
+    content: '今年以来，多只主动权益基金表现亮眼，年内收益率超过20%，科技成长风格基金表现尤为突出。基金经理表示，随着AI、半导体等科技领域的快速发展，相关产业链投资机会不断涌现，将继续关注科技成长领域的投资机会。',
+    related_stocks: ['基金板块', '科技股'],
+    tags: ['基金', '收益率', '科技股']
   }
 ];
 

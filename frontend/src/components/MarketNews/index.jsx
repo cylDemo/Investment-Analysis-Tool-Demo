@@ -3,10 +3,11 @@ import NewsHeader from './NewsHeader';
 import NewsTimeline from './NewsTimeline';
 import NewsEmpty from './NewsEmpty';
 import WatchListPanel from './WatchListPanel';
+import LoginOverlay from '../LoginOverlay';
 import { fetchNewsList } from '../../services/newsApi';
 import './MarketNews.css';
 
-const MarketNews = () => {
+const MarketNews = ({ isLoggedIn, onLogin }) => {
   const [newsList, setNewsList] = useState([]);
   const [filteredNewsList, setFilteredNewsList] = useState([]);
   const [loading, setLoading] = useState(false);
@@ -188,7 +189,7 @@ const MarketNews = () => {
   const currentDate = getCurrentDate();
 
   return (
-    <div className={`market-news ${showWatchList ? 'split-view' : ''}`}>
+    <div className={`market-news ${showWatchList ? 'split-view' : ''} ${!isLoggedIn ? 'login-required' : ''}`}>
       {/* 页面标题区域 - 移到最顶部 */}
       <div className="market-news-page-header">
         <div className="page-header-content">
@@ -280,6 +281,9 @@ const MarketNews = () => {
           />
         )}
       </div>
+
+      {/* 未登录时显示蒙层 */}
+      <LoginOverlay isVisible={!isLoggedIn} onLogin={onLogin} />
     </div>
   );
 };
