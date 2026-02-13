@@ -446,6 +446,7 @@ function App() {
                     <div className="tab-selector">
                       <button 
                         className={`tab-button ${activeTab === 'gold' ? 'active' : ''}`}
+                        data-metal="gold"
                         onClick={async () => {
                           if (activeTab === 'gold') return;
                           
@@ -475,6 +476,7 @@ function App() {
                       </button>
                       <button 
                         className={`tab-button ${activeTab === 'silver' ? 'active' : ''}`}
+                        data-metal="silver"
                         onClick={async () => {
                           if (activeTab === 'silver') return;
                           
@@ -504,6 +506,7 @@ function App() {
                       </button>
                       <button 
                         className={`tab-button ${activeTab === 'copper' ? 'active' : ''}`}
+                        data-metal="copper"
                         onClick={async () => {
                           if (activeTab === 'copper') return;
                           
@@ -533,6 +536,7 @@ function App() {
                       </button>
                       <button 
                         className={`tab-button ${activeTab === 'platinum' ? 'active' : ''}`}
+                        data-metal="platinum"
                         onClick={async () => {
                           if (activeTab === 'platinum') return;
                           
@@ -562,6 +566,7 @@ function App() {
                       </button>
                       <button 
                         className={`tab-button ${activeTab === 'lead' ? 'active' : ''}`}
+                        data-metal="lead"
                         onClick={async () => {
                           if (activeTab === 'lead') return;
                           
@@ -588,6 +593,66 @@ function App() {
                         }}
                       >
                         铅
+                      </button>
+                      <button 
+                        className={`tab-button ${activeTab === 'nickel' ? 'active' : ''}`}
+                        data-metal="nickel"
+                        onClick={async () => {
+                          if (activeTab === 'nickel') return;
+                          
+                          const metalCode = 'nickel';
+                          setActiveTab(metalCode);
+                          setCode(metalCode);
+                          setMetalLoading(true);
+                          
+                          try {
+                            const response = await fetch(`http://localhost:3001/api/metal/${metalCode}`);
+                            if (response.ok) {
+                              const result = await response.json();
+                              setData(result.data);
+                            } else {
+                              const errorResult = await response.json();
+                              alert(errorResult.error || '未找到该金属的数据');
+                            }
+                          } catch (error) {
+                            console.error('搜索出错:', error);
+                            alert('搜索失败，请稍后重试');
+                          } finally {
+                            setMetalLoading(false);
+                          }
+                        }}
+                      >
+                        镍
+                      </button>
+                      <button 
+                        className={`tab-button ${activeTab === 'rare-earth' ? 'active' : ''}`}
+                        data-metal="rare-earth"
+                        onClick={async () => {
+                          if (activeTab === 'rare-earth') return;
+                          
+                          const metalCode = 'rare-earth';
+                          setActiveTab(metalCode);
+                          setCode(metalCode);
+                          setMetalLoading(true);
+                          
+                          try {
+                            const response = await fetch(`http://localhost:3001/api/metal/${metalCode}`);
+                            if (response.ok) {
+                              const result = await response.json();
+                              setData(result.data);
+                            } else {
+                              const errorResult = await response.json();
+                              alert(errorResult.error || '未找到该金属的数据');
+                            }
+                          } catch (error) {
+                            console.error('搜索出错:', error);
+                            alert('搜索失败，请稍后重试');
+                          } finally {
+                            setMetalLoading(false);
+                          }
+                        }}
+                      >
+                        稀土
                       </button>
                     </div>
                     
@@ -1211,7 +1276,7 @@ function App() {
                 )}
 
                 {/* 贵金属数据显示 */}
-                {activeNavTab === 'metal' && ['gold', 'silver', 'copper', 'platinum', 'lead'].includes(activeTab) && (
+                {activeNavTab === 'metal' && ['gold', 'silver', 'copper', 'platinum', 'lead', 'nickel', 'rare-earth'].includes(activeTab) && (
                   <div className="metal-detail-container" style={{ position: 'relative' }}>
                     {data ? (
                       <MetalDetail data={data} isLoggedIn={isLoggedIn} onLogin={() => setShowLoginPage(true)} />
@@ -1244,7 +1309,7 @@ function App() {
                       <FundDetail data={data} advice={advice} />
                     )}
                     
-                    {(activeTab === 'gold' || activeTab === 'silver' || activeTab === 'copper' || activeTab === 'platinum' || activeTab === 'lead') && data && (
+                    {(activeTab === 'gold' || activeTab === 'silver' || activeTab === 'copper' || activeTab === 'platinum' || activeTab === 'lead' || activeTab === 'nickel' || activeTab === 'rare-earth') && data && (
                       <MetalDetail data={data} isLoggedIn={isLoggedIn} onLogin={() => setShowLoginPage(true)} />
                     )}
                   </div>

@@ -466,23 +466,174 @@ body {
 }
 
 .tab-button {
-  padding: 0.75rem 1.5rem;
+  padding: 0.875rem 2rem;
   border: none;
-  background: none;
-  font-size: 16px !important;
-  font-weight: 500;
+  background: linear-gradient(145deg, #ffffff 0%, #f8fafc 100%);
+  font-size: 15px !important;
+  font-weight: 600;
   color: #64748b;
   cursor: pointer;
-  border-bottom: 2px solid transparent;
-  transition: all 0.2s;
+  border-radius: 12px;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
   font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen', 'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue', sans-serif;
-  min-width: 80px;
+  min-width: 100px;
   text-align: center;
+  box-shadow: 
+    0 2px 8px rgba(0, 0, 0, 0.04),
+    0 0 0 1px rgba(0, 0, 0, 0.02);
+  position: relative;
+  overflow: hidden;
+}
+
+.tab-button::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: linear-gradient(135deg, rgba(59, 130, 246, 0.08) 0%, rgba(37, 99, 235, 0.04) 100%);
+  opacity: 0;
+  transition: opacity 0.3s ease;
+}
+
+.tab-button:hover {
+  transform: translateY(-2px);
+  box-shadow: 
+    0 8px 24px rgba(59, 130, 246, 0.12),
+    0 0 0 1px rgba(59, 130, 246, 0.08);
+  color: #3b82f6;
+}
+
+.tab-button:hover::before {
+  opacity: 1;
 }
 
 .tab-button.active {
-  color: #3b82f6;
-  border-bottom-color: #3b82f6;
+  color: #ffffff;
+  background: linear-gradient(135deg, #3b82f6 0%, #2563eb 100%);
+  box-shadow: 
+    0 8px 24px rgba(59, 130, 246, 0.35),
+    0 0 0 1px rgba(59, 130, 246, 0.2),
+    inset 0 1px 0 rgba(255, 255, 255, 0.2);
+  transform: translateY(-2px);
+}
+
+.tab-button.active::before {
+  display: none;
+}
+
+/* 金属标签特殊样式 */
+.metal-selector-container .tab-button[data-metal="gold"]:hover {
+  color: #d97706;
+  box-shadow: 
+    0 8px 24px rgba(245, 158, 11, 0.18),
+    0 0 0 1px rgba(245, 158, 11, 0.1);
+}
+
+.metal-selector-container .tab-button[data-metal="gold"].active {
+  color: #92400e;
+  background: linear-gradient(135deg, #fef3c7 0%, #fde68a 50%, #fcd34d 100%);
+  box-shadow: 
+    0 8px 28px rgba(252, 211, 77, 0.45),
+    0 0 0 1px rgba(251, 191, 36, 0.3),
+    inset 0 1px 0 rgba(255, 255, 255, 0.3);
+}
+
+.metal-selector-container .tab-button[data-metal="silver"]:hover {
+  color: #4b5563;
+  box-shadow: 
+    0 8px 24px rgba(107, 114, 128, 0.18),
+    0 0 0 1px rgba(107, 114, 128, 0.1);
+}
+
+.metal-selector-container .tab-button[data-metal="silver"].active {
+  color: #374151;
+  background: linear-gradient(135deg, #f8fafc 0%, #e2e8f0 50%, #cbd5e1 100%);
+  box-shadow: 
+    0 8px 28px rgba(203, 213, 225, 0.45),
+    0 0 0 1px rgba(148, 163, 184, 0.3),
+    inset 0 1px 0 rgba(255, 255, 255, 0.4);
+}
+
+.metal-selector-container .tab-button[data-metal="copper"]:hover {
+  color: #c2410c;
+  box-shadow: 
+    0 8px 24px rgba(234, 88, 12, 0.18),
+    0 0 0 1px rgba(234, 88, 12, 0.1);
+}
+
+.metal-selector-container .tab-button[data-metal="copper"].active {
+  color: #9a3412;
+  background: linear-gradient(135deg, #fed7aa 0%, #fdba74 50%, #fb923c 100%);
+  box-shadow: 
+    0 8px 28px rgba(253, 186, 116, 0.45),
+    0 0 0 1px rgba(251, 146, 60, 0.3),
+    inset 0 1px 0 rgba(255, 255, 255, 0.25);
+}
+
+.metal-selector-container .tab-button[data-metal="platinum"]:hover {
+  color: #4f46e5;
+  box-shadow: 
+    0 8px 24px rgba(99, 102, 241, 0.18),
+    0 0 0 1px rgba(99, 102, 241, 0.1);
+}
+
+.metal-selector-container .tab-button[data-metal="platinum"].active {
+  color: #312e81;
+  background: linear-gradient(135deg, #e0e7ff 0%, #c7d2fe 50%, #a5b4fc 100%);
+  box-shadow: 
+    0 8px 28px rgba(165, 180, 252, 0.45),
+    0 0 0 1px rgba(129, 140, 248, 0.3),
+    inset 0 1px 0 rgba(255, 255, 255, 0.35);
+}
+
+.metal-selector-container .tab-button[data-metal="lead"]:hover {
+  color: #334155;
+  box-shadow: 
+    0 8px 24px rgba(71, 85, 105, 0.18),
+    0 0 0 1px rgba(71, 85, 105, 0.1);
+}
+
+.metal-selector-container .tab-button[data-metal="lead"].active {
+  color: #334155;
+  background: linear-gradient(135deg, #f1f5f9 0%, #e2e8f0 50%, #cbd5e1 100%);
+  box-shadow: 
+    0 8px 28px rgba(203, 213, 225, 0.45),
+    0 0 0 1px rgba(148, 163, 184, 0.3),
+    inset 0 1px 0 rgba(255, 255, 255, 0.3);
+}
+
+.metal-selector-container .tab-button[data-metal="nickel"]:hover {
+  color: #1e40af;
+  box-shadow: 
+    0 8px 24px rgba(59, 130, 246, 0.18),
+    0 0 0 1px rgba(59, 130, 246, 0.1);
+}
+
+.metal-selector-container .tab-button[data-metal="nickel"].active {
+  color: #1e40af;
+  background: linear-gradient(135deg, #dbeafe 0%, #bfdbfe 50%, #93c5fd 100%);
+  box-shadow: 
+    0 8px 28px rgba(59, 130, 246, 0.45),
+    0 0 0 1px rgba(96, 165, 250, 0.3),
+    inset 0 1px 0 rgba(255, 255, 255, 0.3);
+}
+
+.metal-selector-container .tab-button[data-metal="rare-earth"]:hover {
+  color: #7e22ce;
+  box-shadow: 
+    0 8px 24px rgba(139, 92, 246, 0.18),
+    0 0 0 1px rgba(139, 92, 246, 0.1);
+}
+
+.metal-selector-container .tab-button[data-metal="rare-earth"].active {
+  color: #7e22ce;
+  background: linear-gradient(135deg, #ede9fe 0%, #ddd6fe 50%, #c4b5fd 100%);
+  box-shadow: 
+    0 8px 28px rgba(139, 92, 246, 0.45),
+    0 0 0 1px rgba(167, 139, 250, 0.3),
+    inset 0 1px 0 rgba(255, 255, 255, 0.3);
 }
 
 .search-container {
@@ -1198,11 +1349,139 @@ body {
 
 .app.dark-mode .tab-button {
   color: #94a3b8;
+  background: linear-gradient(145deg, #334155 0%, #1e293b 100%);
+  box-shadow: 
+    0 2px 8px rgba(0, 0, 0, 0.2),
+    0 0 0 1px rgba(255, 255, 255, 0.05);
+}
+
+.app.dark-mode .tab-button:hover {
+  color: #60a5fa;
+  box-shadow: 
+    0 8px 24px rgba(96, 165, 250, 0.2),
+    0 0 0 1px rgba(96, 165, 250, 0.15);
 }
 
 .app.dark-mode .tab-button.active {
-  color: #60a5fa;
-  border-bottom-color: #60a5fa;
+  color: #ffffff;
+  background: linear-gradient(135deg, #3b82f6 0%, #2563eb 100%);
+  box-shadow: 
+    0 8px 24px rgba(59, 130, 246, 0.4),
+    0 0 0 1px rgba(96, 165, 250, 0.3),
+    inset 0 1px 0 rgba(255, 255, 255, 0.15);
+}
+
+/* 深色模式 - 金属标签特殊样式 */
+.app.dark-mode .metal-selector-container .tab-button[data-metal="gold"]:hover {
+  color: #fbbf24;
+  box-shadow: 
+    0 8px 24px rgba(251, 191, 36, 0.25),
+    0 0 0 1px rgba(251, 191, 36, 0.2);
+}
+
+.app.dark-mode .metal-selector-container .tab-button[data-metal="gold"].active {
+  color: #92400e;
+  background: linear-gradient(135deg, #fef3c7 0%, #fde68a 50%, #fcd34d 100%);
+  box-shadow: 
+    0 8px 28px rgba(252, 211, 77, 0.5),
+    0 0 0 1px rgba(251, 191, 36, 0.5),
+    inset 0 1px 0 rgba(255, 255, 255, 0.35);
+}
+
+.app.dark-mode .metal-selector-container .tab-button[data-metal="silver"]:hover {
+  color: #f1f5f9;
+  box-shadow: 
+    0 8px 24px rgba(226, 232, 240, 0.3),
+    0 0 0 1px rgba(241, 245, 249, 0.25);
+}
+
+.app.dark-mode .metal-selector-container .tab-button[data-metal="silver"].active {
+  color: #374151;
+  background: linear-gradient(135deg, #ffffff 0%, #f8fafc 50%, #e2e8f0 100%);
+  box-shadow: 
+    0 8px 28px rgba(248, 250, 252, 0.6),
+    0 0 0 1px rgba(255, 255, 255, 0.5),
+    inset 0 1px 0 rgba(255, 255, 255, 0.4);
+}
+
+.app.dark-mode .metal-selector-container .tab-button[data-metal="copper"]:hover {
+  color: #fed7aa;
+  box-shadow: 
+    0 8px 24px rgba(253, 186, 116, 0.3),
+    0 0 0 1px rgba(254, 215, 170, 0.25);
+}
+
+.app.dark-mode .metal-selector-container .tab-button[data-metal="copper"].active {
+  color: #9a3412;
+  background: linear-gradient(135deg, #fdba74 0%, #fb923c 50%, #ea580c 100%);
+  box-shadow: 
+    0 8px 28px rgba(251, 146, 60, 0.55),
+    0 0 0 1px rgba(253, 186, 116, 0.5),
+    inset 0 1px 0 rgba(255, 255, 255, 0.3);
+}
+
+.app.dark-mode .metal-selector-container .tab-button[data-metal="platinum"]:hover {
+  color: #ddd6fe;
+  box-shadow: 
+    0 8px 24px rgba(196, 181, 253, 0.3),
+    0 0 0 1px rgba(221, 214, 254, 0.25);
+}
+
+.app.dark-mode .metal-selector-container .tab-button[data-metal="platinum"].active {
+  color: #312e81;
+  background: linear-gradient(135deg, #e0e7ff 0%, #c7d2fe 50%, #a5b4fc 100%);
+  box-shadow: 
+    0 8px 28px rgba(165, 180, 252, 0.55),
+    0 0 0 1px rgba(196, 181, 253, 0.5),
+    inset 0 1px 0 rgba(255, 255, 255, 0.35);
+}
+
+.app.dark-mode .metal-selector-container .tab-button[data-metal="lead"]:hover {
+  color: #e2e8f0;
+  box-shadow: 
+    0 8px 24px rgba(203, 213, 225, 0.3),
+    0 0 0 1px rgba(226, 232, 240, 0.25);
+}
+
+.app.dark-mode .metal-selector-container .tab-button[data-metal="lead"].active {
+  color: #334155;
+  background: linear-gradient(135deg, #f1f5f9 0%, #e2e8f0 50%, #cbd5e1 100%);
+  box-shadow: 
+    0 8px 28px rgba(203, 213, 225, 0.55),
+    0 0 0 1px rgba(226, 232, 240, 0.5),
+    inset 0 1px 0 rgba(255, 255, 255, 0.35);
+}
+
+.app.dark-mode .metal-selector-container .tab-button[data-metal="nickel"]:hover {
+  color: #bfdbfe;
+  box-shadow: 
+    0 8px 24px rgba(59, 130, 246, 0.3),
+    0 0 0 1px rgba(96, 165, 250, 0.25);
+}
+
+.app.dark-mode .metal-selector-container .tab-button[data-metal="nickel"].active {
+  color: #1e40af;
+  background: linear-gradient(135deg, #dbeafe 0%, #bfdbfe 50%, #93c5fd 100%);
+  box-shadow: 
+    0 8px 28px rgba(59, 130, 246, 0.55),
+    0 0 0 1px rgba(96, 165, 250, 0.5),
+    inset 0 1px 0 rgba(255, 255, 255, 0.35);
+}
+
+.app.dark-mode .metal-selector-container .tab-button[data-metal="rare-earth"]:hover {
+  color: #ddd6fe;
+  box-shadow: 
+    0 8px 24px rgba(139, 92, 246, 0.3),
+    0 0 0 1px rgba(167, 139, 250, 0.25);
+}
+
+.app.dark-mode .metal-selector-container .tab-button[data-metal="rare-earth"].active {
+  color: #7e22ce;
+  background: linear-gradient(135deg, #ede9fe 0%, #ddd6fe 50%, #c4b5fd 100%);
+  box-shadow: 
+    0 8px 28px rgba(139, 92, 246, 0.55),
+    0 0 0 1px rgba(167, 139, 250, 0.5),
+    inset 0 1px 0 rgba(255, 255, 255, 0.35);
 }
 
 .app.dark-mode .code-input,

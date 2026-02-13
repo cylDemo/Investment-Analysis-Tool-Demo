@@ -1162,6 +1162,26 @@ const metalData = {
     unit: '元/吨',
     description: '铅是一种重要的有色金属，具有良好的耐腐蚀性和可塑性，广泛应用于蓄电池、电缆护套、防辐射材料等领域。铅价格受汽车工业需求、电池需求、环保政策等多种因素影响。',
     history: generateMetalHistory(14000, 2022, 2026, 0.05)
+  },
+  'nickel': {
+    name: '镍',
+    code: 'nickel',
+    price: 182500.00,
+    change: 2800.00,
+    changePercent: 1.56,
+    unit: '元/吨',
+    description: '镍是一种重要的有色金属，具有良好的耐腐蚀性和高温强度，广泛应用于不锈钢、电池、电镀等领域。镍价格受不锈钢行业需求、新能源汽车电池需求、全球供应链状况等多种因素影响。',
+    history: generateMetalHistory(140000, 2022, 2026, 0.1)
+  },
+  'rare-earth': {
+    name: '稀土',
+    code: 'rare-earth',
+    price: 386000.00,
+    change: 5200.00,
+    changePercent: 1.37,
+    unit: '元/吨',
+    description: '稀土是一组重要的战略资源，具有独特的物理化学性质，广泛应用于新能源、电子信息、航空航天等高新技术领域。稀土价格受全球科技发展需求、地缘政治因素、环保政策等多种因素影响。',
+    history: generateMetalHistory(300000, 2022, 2026, 0.12)
   }
 };
 
