@@ -1,7 +1,7 @@
 import React, { useState, useRef, useEffect } from 'react';
 import './Settings.css';
 
-const Settings = ({ darkMode, setDarkMode, onLogout, onNicknameChange, language, setLanguage, resourceSettings, setResourceSettings }) => {
+const Settings = ({ darkMode, setDarkMode, onLogout, onNicknameChange, language, setLanguage, resourceSettings, setResourceSettings, isLoggedIn, onLogin }) => {
   const [activeSubPage, setActiveSubPage] = useState(null);
   const scrollPositionRef = useRef(0);
 
@@ -808,7 +808,26 @@ const Settings = ({ darkMode, setDarkMode, onLogout, onNicknameChange, language,
             </div>
             <div className="resource-content">
               <div className="resource-section">
-                <h4>股票页面</h4>
+                <h4>
+                  股票页面
+                  <label className="switch section-switch">
+                    <input 
+                      type="checkbox" 
+                      checked={resourceSettings.stockRecommendation && resourceSettings.stockRanking}
+                      onChange={() => {
+                        const allStockModulesEnabled = resourceSettings.stockRecommendation && resourceSettings.stockRanking;
+                        const newSettings = {
+                          ...resourceSettings,
+                          stockRecommendation: !allStockModulesEnabled,
+                          stockRanking: !allStockModulesEnabled
+                        };
+                        setResourceSettings(newSettings);
+                        localStorage.setItem('resourceSettings', JSON.stringify(newSettings));
+                      }}
+                    />
+                    <span className="slider"></span>
+                  </label>
+                </h4>
                 <div className="resource-item">
                   <div className="item-info">
                     <span className="item-name">投资推荐模块</span>
@@ -839,7 +858,26 @@ const Settings = ({ darkMode, setDarkMode, onLogout, onNicknameChange, language,
                 </div>
               </div>
               <div className="resource-section">
-                <h4>基金页面</h4>
+                <h4>
+                  基金页面
+                  <label className="switch section-switch">
+                    <input 
+                      type="checkbox" 
+                      checked={resourceSettings.fundRecommendation && resourceSettings.fundRanking}
+                      onChange={() => {
+                        const allFundModulesEnabled = resourceSettings.fundRecommendation && resourceSettings.fundRanking;
+                        const newSettings = {
+                          ...resourceSettings,
+                          fundRecommendation: !allFundModulesEnabled,
+                          fundRanking: !allFundModulesEnabled
+                        };
+                        setResourceSettings(newSettings);
+                        localStorage.setItem('resourceSettings', JSON.stringify(newSettings));
+                      }}
+                    />
+                    <span className="slider"></span>
+                  </label>
+                </h4>
                 <div className="resource-item">
                   <div className="item-info">
                     <span className="item-name">投资推荐模块</span>
@@ -864,6 +902,161 @@ const Settings = ({ darkMode, setDarkMode, onLogout, onNicknameChange, language,
                       type="checkbox" 
                       checked={resourceSettings.fundRanking}
                       onChange={() => handleResourceToggle('fundRanking')}
+                    />
+                    <span className="slider"></span>
+                  </label>
+                </div>
+              </div>
+              <div className="resource-section">
+                <h4>
+                  金属行业
+                  <label className="switch section-switch">
+                    <input 
+                      type="checkbox" 
+                      checked={resourceSettings.metalGold && resourceSettings.metalSilver && resourceSettings.metalCopper && resourceSettings.metalPlatinum && resourceSettings.metalLead && resourceSettings.metalNickel && resourceSettings.metalRareEarth && resourceSettings.metalZirconium && resourceSettings.metalTungsten}
+                      onChange={() => {
+                        const allMetalsEnabled = resourceSettings.metalGold && resourceSettings.metalSilver && resourceSettings.metalCopper && resourceSettings.metalPlatinum && resourceSettings.metalLead && resourceSettings.metalNickel && resourceSettings.metalRareEarth && resourceSettings.metalZirconium && resourceSettings.metalTungsten;
+                        const newSettings = {
+                          ...resourceSettings,
+                          metalGold: !allMetalsEnabled,
+                          metalSilver: !allMetalsEnabled,
+                          metalCopper: !allMetalsEnabled,
+                          metalPlatinum: !allMetalsEnabled,
+                          metalLead: !allMetalsEnabled,
+                          metalNickel: !allMetalsEnabled,
+                          metalRareEarth: !allMetalsEnabled,
+                          metalZirconium: !allMetalsEnabled,
+                          metalTungsten: !allMetalsEnabled
+                        };
+                        setResourceSettings(newSettings);
+                        localStorage.setItem('resourceSettings', JSON.stringify(newSettings));
+                      }}
+                    />
+                    <span className="slider"></span>
+                  </label>
+                </h4>
+                <div className="resource-item">
+                  <div className="item-info">
+                    <span className="item-name">黄金</span>
+                    <span className="item-desc">显示黄金金属信息</span>
+                  </div>
+                  <label className="switch">
+                    <input 
+                      type="checkbox" 
+                      checked={resourceSettings.metalGold}
+                      onChange={() => handleResourceToggle('metalGold')}
+                    />
+                    <span className="slider"></span>
+                  </label>
+                </div>
+                <div className="resource-item">
+                  <div className="item-info">
+                    <span className="item-name">白银</span>
+                    <span className="item-desc">显示白银金属信息</span>
+                  </div>
+                  <label className="switch">
+                    <input 
+                      type="checkbox" 
+                      checked={resourceSettings.metalSilver}
+                      onChange={() => handleResourceToggle('metalSilver')}
+                    />
+                    <span className="slider"></span>
+                  </label>
+                </div>
+                <div className="resource-item">
+                  <div className="item-info">
+                    <span className="item-name">铜</span>
+                    <span className="item-desc">显示铜金属信息</span>
+                  </div>
+                  <label className="switch">
+                    <input 
+                      type="checkbox" 
+                      checked={resourceSettings.metalCopper}
+                      onChange={() => handleResourceToggle('metalCopper')}
+                    />
+                    <span className="slider"></span>
+                  </label>
+                </div>
+                <div className="resource-item">
+                  <div className="item-info">
+                    <span className="item-name">铂</span>
+                    <span className="item-desc">显示铂金属信息</span>
+                  </div>
+                  <label className="switch">
+                    <input 
+                      type="checkbox" 
+                      checked={resourceSettings.metalPlatinum}
+                      onChange={() => handleResourceToggle('metalPlatinum')}
+                    />
+                    <span className="slider"></span>
+                  </label>
+                </div>
+                <div className="resource-item">
+                  <div className="item-info">
+                    <span className="item-name">铅</span>
+                    <span className="item-desc">显示铅金属信息</span>
+                  </div>
+                  <label className="switch">
+                    <input 
+                      type="checkbox" 
+                      checked={resourceSettings.metalLead}
+                      onChange={() => handleResourceToggle('metalLead')}
+                    />
+                    <span className="slider"></span>
+                  </label>
+                </div>
+                <div className="resource-item">
+                  <div className="item-info">
+                    <span className="item-name">镍</span>
+                    <span className="item-desc">显示镍金属信息</span>
+                  </div>
+                  <label className="switch">
+                    <input 
+                      type="checkbox" 
+                      checked={resourceSettings.metalNickel}
+                      onChange={() => handleResourceToggle('metalNickel')}
+                    />
+                    <span className="slider"></span>
+                  </label>
+                </div>
+                <div className="resource-item">
+                  <div className="item-info">
+                    <span className="item-name">稀土</span>
+                    <span className="item-desc">显示稀土金属信息</span>
+                  </div>
+                  <label className="switch">
+                    <input 
+                      type="checkbox" 
+                      checked={resourceSettings.metalRareEarth}
+                      onChange={() => handleResourceToggle('metalRareEarth')}
+                    />
+                    <span className="slider"></span>
+                  </label>
+                </div>
+                <div className="resource-item">
+                  <div className="item-info">
+                    <span className="item-name">锆</span>
+                    <span className="item-desc">显示锆金属信息</span>
+                  </div>
+                  <label className="switch">
+                    <input 
+                      type="checkbox" 
+                      checked={resourceSettings.metalZirconium}
+                      onChange={() => handleResourceToggle('metalZirconium')}
+                    />
+                    <span className="slider"></span>
+                  </label>
+                </div>
+                <div className="resource-item">
+                  <div className="item-info">
+                    <span className="item-name">钨</span>
+                    <span className="item-desc">显示钨金属信息</span>
+                  </div>
+                  <label className="switch">
+                    <input 
+                      type="checkbox" 
+                      checked={resourceSettings.metalTungsten}
+                      onChange={() => handleResourceToggle('metalTungsten')}
                     />
                     <span className="slider"></span>
                   </label>
@@ -1245,7 +1438,13 @@ const Settings = ({ darkMode, setDarkMode, onLogout, onNicknameChange, language,
               <div className="group-header">
                 <h3>账户信息</h3>
               </div>
-              <div className="settings-item" onClick={() => setActiveSubPage('profile')}>
+              <div className="settings-item" onClick={() => {
+                if (!isLoggedIn) {
+                  onLogin();
+                } else {
+                  setActiveSubPage('profile');
+                }
+              }}>
                 <span className="item-name">个人资料</span>
                 <span className="item-arrow">></span>
               </div>
@@ -1255,7 +1454,13 @@ const Settings = ({ darkMode, setDarkMode, onLogout, onNicknameChange, language,
               <div className="group-header">
                 <h3>安全与权限</h3>
               </div>
-              <div className="settings-item" onClick={() => setActiveSubPage('security')}>
+              <div className="settings-item" onClick={() => {
+                if (!isLoggedIn) {
+                  onLogin();
+                } else {
+                  setActiveSubPage('security');
+                }
+              }}>
                 <span className="item-name">账户安全</span>
                 <span className="item-status security-high">高</span>
                 <span className="item-arrow">></span>
@@ -1290,7 +1495,13 @@ const Settings = ({ darkMode, setDarkMode, onLogout, onNicknameChange, language,
               <div className="group-header">
                 <h3>系统工具</h3>
               </div>
-              <div className="settings-item" onClick={() => setActiveSubPage('resources')}>
+              <div className="settings-item" onClick={() => {
+                if (!isLoggedIn) {
+                  onLogin();
+                } else {
+                  setActiveSubPage('resources');
+                }
+              }}>
                 <span className="item-name">资源管理</span>
                 <span className="item-arrow">></span>
               </div>
@@ -1323,17 +1534,21 @@ const Settings = ({ darkMode, setDarkMode, onLogout, onNicknameChange, language,
               </div>
             </div>
 
-            <div className="settings-group action-group">
-              <div className="settings-item action-item logout-item" onClick={handleLogout}>
-                <span className="item-name">退出登录</span>
-              </div>
-            </div>
+            {isLoggedIn && (
+              <>
+                <div className="settings-group action-group">
+                  <div className="settings-item action-item logout-item" onClick={handleLogout}>
+                    <span className="item-name">退出登录</span>
+                  </div>
+                </div>
 
-            <div className="settings-group action-group danger-zone">
-              <div className="settings-item action-item cancel-item" onClick={() => setActiveSubPage('cancel')}>
-                <span className="item-name danger-text">注销账户</span>
-              </div>
-            </div>
+                <div className="settings-group action-group danger-zone">
+                  <div className="settings-item action-item cancel-item" onClick={() => setActiveSubPage('cancel')}>
+                    <span className="item-name danger-text">注销账户</span>
+                  </div>
+                </div>
+              </>
+            )}
           </div>
         </>
       )}

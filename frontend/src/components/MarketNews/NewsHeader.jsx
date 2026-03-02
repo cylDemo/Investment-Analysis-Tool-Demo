@@ -110,7 +110,8 @@ const NewsHeader = ({ showImportantOnly, onToggleImportant, selectedCategory, on
       metal: '🥇',
       company: '🏢',
       industry: '🏭',
-      exchange: '🏛️'
+      exchange: '🏛️',
+      international: '🌍'
     };
     return icons[key] || '📊';
   };

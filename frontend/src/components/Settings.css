@@ -762,6 +762,7 @@ input:checked + .slider:before {
   border-bottom: 2px solid #3b82f6;
   display: flex;
   align-items: center;
+  justify-content: space-between;
   gap: 0.5rem;
 }
 
@@ -771,6 +772,12 @@ input:checked + .slider:before {
   height: 20px;
   background: linear-gradient(180deg, #3b82f6 0%, #1e40af 100%);
   border-radius: 2px;
+  margin-right: 0.5rem;
+}
+
+.resource-section h4 .section-switch {
+  margin-left: auto;
+  transform: scale(0.8);
 }
 
 .resource-item {
@@ -1551,6 +1558,11 @@ input:checked + .slider:before {
 
 .settings-page.dark-mode .resource-section h4::before {
   background: linear-gradient(180deg, #60a5fa 0%, #3b82f6 100%);
+}
+
+.settings-page.dark-mode .resource-section h4 .section-switch {
+  margin-left: auto;
+  transform: scale(0.8);
 }
 
 .settings-page.dark-mode .resource-item {

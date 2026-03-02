@@ -134,6 +134,197 @@ body {
   margin-bottom: 0;
 }
 
+/* 金属隐藏提示信息样式 */
+.metal-hidden-message {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 4rem 2rem;
+  text-align: center;
+  background: linear-gradient(135deg, #f8fafc 0%, #e2e8f0 100%);
+  border-radius: 20px;
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+  margin: 2rem;
+  min-height: 350px;
+  position: relative;
+  overflow: hidden;
+  transition: all 0.3s ease;
+}
+
+.metal-hidden-message::before {
+  content: '';
+  position: absolute;
+  top: -50%;
+  left: -50%;
+  width: 200%;
+  height: 200%;
+  background: radial-gradient(circle, rgba(59, 130, 246, 0.1) 0%, transparent 70%);
+  animation: float 6s ease-in-out infinite;
+}
+
+@keyframes float {
+  0% {
+    transform: translate(0, 0) rotate(0deg);
+  }
+  50% {
+    transform: translate(10%, 10%) rotate(5deg);
+  }
+  100% {
+    transform: translate(0, 0) rotate(0deg);
+  }
+}
+
+.app.dark-mode .metal-hidden-message {
+  background: linear-gradient(135deg, #334155 0%, #1e293b 100%);
+  color: #f1f5f9;
+}
+
+.app.dark-mode .metal-hidden-message::before {
+  background: radial-gradient(circle, rgba(59, 130, 246, 0.05) 0%, transparent 70%);
+}
+
+.metal-hidden-message .message-icon {
+  font-size: 5rem;
+  margin-bottom: 1.5rem;
+  animation: pulse 2s infinite;
+  position: relative;
+  z-index: 1;
+}
+
+@keyframes pulse {
+  0% {
+    transform: scale(1);
+    filter: brightness(1);
+  }
+  50% {
+    transform: scale(1.1);
+    filter: brightness(1.1);
+  }
+  100% {
+    transform: scale(1);
+    filter: brightness(1);
+  }
+}
+
+.metal-hidden-message h3 {
+  font-size: 1.75rem;
+  font-weight: 700;
+  margin-bottom: 1rem;
+  color: #1e293b;
+  position: relative;
+  z-index: 1;
+  letter-spacing: -0.025em;
+}
+
+.app.dark-mode .metal-hidden-message h3 {
+  color: #f1f5f9;
+}
+
+.metal-hidden-message p {
+  font-size: 1.125rem;
+  line-height: 1.6;
+  margin-bottom: 2.5rem;
+  color: #475569;
+  max-width: 500px;
+  position: relative;
+  z-index: 1;
+}
+
+.app.dark-mode .metal-hidden-message p {
+  color: #94a3b8;
+}
+
+.metal-hidden-message .settings-button {
+  padding: 1rem 2.5rem;
+  background: linear-gradient(135deg, #3b82f6 0%, #2563eb 100%);
+  color: white;
+  border: none;
+  border-radius: 12px;
+  font-size: 1.125rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  position: relative;
+  z-index: 1;
+  box-shadow: 0 4px 12px rgba(59, 130, 246, 0.3);
+}
+
+.metal-hidden-message .settings-button:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 16px rgba(59, 130, 246, 0.4);
+  background: linear-gradient(135deg, #2563eb 0%, #1d4ed8 100%);
+}
+
+.metal-hidden-message .settings-button:active {
+  transform: translateY(0);
+  box-shadow: 0 2px 8px rgba(59, 130, 246, 0.3);
+}
+
+/* 响应式设计 */
+@media (max-width: 768px) {
+  .metal-hidden-message {
+    padding: 3rem 1.5rem;
+    margin: 1rem;
+    min-height: 300px;
+  }
+  
+  .metal-hidden-message .message-icon {
+    font-size: 4rem;
+  }
+  
+  .metal-hidden-message h3 {
+    font-size: 1.5rem;
+  }
+  
+  .metal-hidden-message p {
+    font-size: 1rem;
+  }
+  
+  .metal-hidden-message .settings-button {
+    padding: 0.875rem 2rem;
+    font-size: 1rem;
+  }
+}
+
+@media (max-width: 480px) {
+  .metal-hidden-message {
+    padding: 2.5rem 1rem;
+    min-height: 250px;
+  }
+  
+  .metal-hidden-message .message-icon {
+    font-size: 3.5rem;
+  }
+  
+  .metal-hidden-message h3 {
+    font-size: 1.25rem;
+  }
+  
+  .metal-hidden-message p {
+    font-size: 0.9rem;
+  }
+  
+  .metal-hidden-message .settings-button {
+    padding: 0.75rem 1.5rem;
+    font-size: 0.9rem;
+  }
+}
+.metal-hidden-message .settings-button:active {
+  transform: translateY(0);
+  box-shadow: 0 4px 12px rgba(59, 130, 246, 0.3);
+}
+
+.app.dark-mode .metal-hidden-message .settings-button {
+  background: linear-gradient(135deg, #60a5fa 0%, #3b82f6 100%);
+  box-shadow: 0 4px 12px rgba(59, 130, 246, 0.4);
+}
+
+.app.dark-mode .metal-hidden-message .settings-button:hover {
+  background: linear-gradient(135deg, #3b82f6 0%, #2563eb 100%);
+  box-shadow: 0 6px 16px rgba(59, 130, 246, 0.5);
+}
+
 .metal-selector-header {
   margin-bottom: 1rem;
 }
@@ -636,11 +827,44 @@ body {
     inset 0 1px 0 rgba(255, 255, 255, 0.3);
 }
 
+/* 锆金属特殊样式 */
+.metal-selector-container .tab-button[data-metal="zirconium"]:hover {
+  color: #0369a1;
+  box-shadow: 
+    0 8px 24px rgba(3, 105, 161, 0.18),
+    0 0 0 1px rgba(3, 105, 161, 0.1);
+}
+
+.metal-selector-container .tab-button[data-metal="zirconium"].active {
+  color: #0369a1;
+  background: linear-gradient(135deg, #e0f2fe 0%, #bae6fd 50%, #7dd3fc 100%);
+  box-shadow: 
+    0 8px 28px rgba(125, 211, 252, 0.45),
+    0 0 0 1px rgba(56, 189, 248, 0.3),
+    inset 0 1px 0 rgba(255, 255, 255, 0.3);
+}
+
+.metal-selector-container .tab-button[data-metal="tungsten"]:hover {
+  color: #374151;
+  box-shadow: 
+    0 8px 24px rgba(55, 65, 81, 0.18),
+    0 0 0 1px rgba(55, 65, 81, 0.1);
+}
+
+.metal-selector-container .tab-button[data-metal="tungsten"].active {
+  color: #374151;
+  background: linear-gradient(135deg, #f3f4f6 0%, #e5e7eb 50%, #d1d5db 100%);
+  box-shadow: 
+    0 8px 28px rgba(209, 213, 219, 0.45),
+    0 0 0 1px rgba(156, 163, 175, 0.3),
+    inset 0 1px 0 rgba(255, 255, 255, 0.3);
+}
+
 .search-container {
   display: flex;
   gap: 1rem;
   margin-top: 2rem;
-  margin-bottom: 2rem;
+  margin-bottom: 0;
   padding: 0 2rem;
 }
 
@@ -688,30 +912,101 @@ body {
 }
 
 .example-codes {
-  margin-top: 1.5rem;
+  margin-top: 0.5rem;
   padding: 0 2rem;
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
 }
 
 .example-codes h3 {
-  font-size: 1.1rem;
-  font-weight: 600;
-  margin-bottom: 1rem;
-  color: #334155;
+  font-size: 0.9rem;
+  font-weight: 400;
+  margin: 0;
+  color: #475569;
+  white-space: nowrap;
 }
 
 .example-code {
   display: inline-block;
-  padding: 0.5rem 1rem;
-  background-color: #f1f5f9;
-  border-radius: 4px;
-  margin-right: 1rem;
-  margin-bottom: 1rem;
+  padding: 0.2rem 0.6rem;
+  background-color: #f8fafc;
+  border: 1px solid #e2e8f0;
+  border-radius: 6px;
+  margin-right: 0.5rem;
+  margin-bottom: 0;
   cursor: pointer;
   transition: all 0.2s;
+  font-size: 0.8rem;
+  font-weight: 400;
+  color: #475569;
+  white-space: nowrap;
 }
 
 .example-code:hover {
-  background-color: #e2e8f0;
+  background-color: #f1f5f9;
+  border-color: #cbd5e1;
+  transform: translateY(-1px);
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
+}
+
+/* 股市实时状态数据样式 */
+.stock-indices-container {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+  gap: 1rem;
+  margin: 1.5rem 2rem;
+}
+
+.stock-index-card {
+  padding: 1.25rem;
+  background-color: #ffffff;
+  border: 1px solid #e2e8f0;
+  border-radius: 8px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  transition: all 0.2s;
+  min-height: 120px;
+}
+
+.stock-index-card:hover {
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  transform: translateY(-2px);
+}
+
+.index-name {
+  font-size: 0.9rem;
+  font-weight: 500;
+  color: #64748b;
+  margin-bottom: 0.5rem;
+}
+
+.index-price {
+  font-size: 1.1rem;
+  font-weight: 600;
+  color: #1e293b;
+  margin-bottom: 0.5rem;
+}
+
+.index-change {
+  font-size: 0.85rem;
+  font-weight: 500;
+  padding: 0.2rem 0.6rem;
+  border-radius: 12px;
+}
+
+.index-change.positive {
+  color: #10b981;
+  background-color: #d1fae5;
+}
+
+.index-change.negative {
+  color: #ef4444;
+  background-color: #fee2e2;
 }
 
 .detail-page {
@@ -1484,6 +1779,40 @@ body {
     inset 0 1px 0 rgba(255, 255, 255, 0.35);
 }
 
+/* 锆金属深色模式特殊样式 */
+.app.dark-mode .metal-selector-container .tab-button[data-metal="zirconium"]:hover {
+  color: #7dd3fc;
+  box-shadow: 
+    0 8px 24px rgba(125, 211, 252, 0.3),
+    0 0 0 1px rgba(56, 189, 248, 0.25);
+}
+
+.app.dark-mode .metal-selector-container .tab-button[data-metal="zirconium"].active {
+  color: #0369a1;
+  background: linear-gradient(135deg, #e0f2fe 0%, #bae6fd 50%, #7dd3fc 100%);
+  box-shadow: 
+    0 8px 28px rgba(125, 211, 252, 0.55),
+    0 0 0 1px rgba(56, 189, 248, 0.5),
+    inset 0 1px 0 rgba(255, 255, 255, 0.35);
+}
+
+/* 钨金属深色模式特殊样式 */
+.app.dark-mode .metal-selector-container .tab-button[data-metal="tungsten"]:hover {
+  color: #d1d5db;
+  box-shadow: 
+    0 8px 24px rgba(209, 213, 219, 0.3),
+    0 0 0 1px rgba(156, 163, 175, 0.25);
+}
+
+.app.dark-mode .metal-selector-container .tab-button[data-metal="tungsten"].active {
+  color: #374151;
+  background: linear-gradient(135deg, #f3f4f6 0%, #e5e7eb 50%, #d1d5db 100%);
+  box-shadow: 
+    0 8px 28px rgba(209, 213, 219, 0.55),
+    0 0 0 1px rgba(156, 163, 175, 0.5),
+    inset 0 1px 0 rgba(255, 255, 255, 0.35);
+}
+
 .app.dark-mode .code-input,
 .app.dark-mode .year-select,
 .app.dark-mode .month-select,
@@ -1524,16 +1853,59 @@ body {
 }
 
 .app.dark-mode .example-codes h3 {
-  color: #f1f5f9;
+  color: #cbd5e1;
+  font-size: 0.9rem;
+  font-weight: 400;
+  margin: 0;
+  white-space: nowrap;
 }
 
 .app.dark-mode .example-code {
   background-color: #334155;
+  border: 1px solid #475569;
   color: #f1f5f9;
+  font-size: 0.8rem;
+  font-weight: 400;
 }
 
 .app.dark-mode .example-code:hover {
   background-color: #475569;
+  border-color: #64748b;
+  transform: translateY(-1px);
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.2);
+}
+
+/* 深色模式下的股市实时状态数据样式 */
+.app.dark-mode .stock-indices-container {
+  gap: 1rem;
+}
+
+.app.dark-mode .stock-index-card {
+  background-color: #334155;
+  border: 1px solid #475569;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
+}
+
+.app.dark-mode .stock-index-card:hover {
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.4);
+}
+
+.app.dark-mode .index-name {
+  color: #94a3b8;
+}
+
+.app.dark-mode .index-price {
+  color: #f1f5f9;
+}
+
+.app.dark-mode .index-change.positive {
+  color: #34d399;
+  background-color: #064e3b;
+}
+
+.app.dark-mode .index-change.negative {
+  color: #f87171;
+  background-color: #7f1d1d;
 }
 
 .app.dark-mode .stock-detail h2,
@@ -1843,24 +2215,35 @@ body {
   background-color: #f0f8ff;
   border-radius: 8px;
   border: 1px solid #b3d9ff;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
 }
 
-.investment-recommendation h3 {
-  margin-top: 0;
-  margin-bottom: 1rem;
-  color: #1e90ff;
-  font-size: 1.1rem;
-  font-weight: 600;
-}
+
 
 .recommendation-input {
-  display: flex;
-  gap: 1rem;
+  margin-bottom: 0.75rem;
+}
+
+.recommendation-button-container {
   margin-bottom: 1.5rem;
 }
 
+.recommendation-button {
+  width: 100%;
+  padding: 1rem 1.5rem;
+  background: linear-gradient(90deg, #3b82f6 0%, #60a5fa 100%);
+  color: white;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+  font-size: 1.1rem;
+  font-weight: 600;
+  transition: all 0.3s;
+  box-shadow: 0 2px 4px rgba(59, 130, 246, 0.2);
+}
+
 .recommendation-code-input {
-  flex: 1;
+  width: 100%;
   padding: 0.75rem 1rem;
   border: 1px solid #e2e8f0;
   border-radius: 4px;
@@ -1887,13 +2270,17 @@ body {
 }
 
 .recommendation-button:hover:not(:disabled) {
-  opacity: 0.9;
+  background: linear-gradient(90deg, #2563eb 0%, #3b82f6 100%);
+  box-shadow: 0 4px 8px rgba(59, 130, 246, 0.3);
+  transform: translateY(-1px);
 }
 
 .recommendation-button:disabled {
-  background: linear-gradient(90deg, #B3E5FC 0%, #E0F7FA 100%);
+  background: linear-gradient(90deg, #93c5fd 0%, #bfdbfe 100%);
   opacity: 0.6;
   cursor: not-allowed;
+  box-shadow: none;
+  transform: none;
 }
 
 /* 投资推荐结果 - 优化版 */
@@ -2029,9 +2416,7 @@ body {
   border-color: #336699;
 }
 
-.app.dark-mode .investment-recommendation h3 {
-  color: #4da6ff;
-}
+
 
 .app.dark-mode .recommendation-code-input {
   background-color: #334155;
@@ -2045,16 +2430,31 @@ body {
 }
 
 .app.dark-mode .recommendation-button {
-  background: linear-gradient(90deg, #1e3a8a 0%, #3b82f6 100%);
+  width: 100%;
+  padding: 1rem 1.5rem;
+  background: linear-gradient(90deg, #2563eb 0%, #3b82f6 100%);
+  color: white;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+  font-size: 1.1rem;
+  font-weight: 600;
+  transition: all 0.3s;
+  box-shadow: 0 2px 4px rgba(59, 130, 246, 0.3);
 }
 
 .app.dark-mode .recommendation-button:hover:not(:disabled) {
-  opacity: 0.9;
+  background: linear-gradient(90deg, #1d4ed8 0%, #2563eb 100%);
+  box-shadow: 0 4px 8px rgba(59, 130, 246, 0.4);
+  transform: translateY(-1px);
 }
 
 .app.dark-mode .recommendation-button:disabled {
-  background: linear-gradient(90deg, #1e3a8a 0%, #3b82f6 100%);
+  background: linear-gradient(90deg, #1e3a8a 0%, #312e81 100%);
   opacity: 0.6;
+  cursor: not-allowed;
+  box-shadow: none;
+  transform: none;
 }
 
 /* 深色模式 - 投资推荐结果 */
@@ -2096,6 +2496,316 @@ body {
 
 .app.dark-mode .recommendation-value {
   color: #e2e8f0;
+}
+
+/* 基金分类功能样式 */
+.fund-categories {
+  margin: 2rem 2rem;
+  background: #ffffff;
+  border-radius: 2rem;
+  box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1);
+  overflow: hidden;
+  border: 1px solid rgba(226, 232, 240, 0.8);
+}
+
+.fund-categories:hover {
+  /* 移除悬浮效果，只保留基金列表的悬浮效果 */
+}
+
+.category-tabs {
+  display: flex;
+  background: #f8fafc;
+  padding: 0.5rem;
+  border-top-left-radius: 2rem;
+  border-top-right-radius: 2rem;
+  border: 1px solid #e2e8f0;
+  border-bottom: none;
+}
+
+.category-tab {
+  flex: 1;
+  padding: 0.75rem 1rem;
+  background: transparent;
+  border: 1px solid #e2e8f0;
+  border-radius: 0.75rem;
+  cursor: pointer;
+  font-size: 0.875rem;
+  font-weight: 500;
+  color: #64748b;
+  transition: all 0.3s ease;
+  text-align: center;
+  position: relative;
+  overflow: hidden;
+  margin: 0 0.25rem;
+}
+
+.category-tab::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(90deg, transparent, rgba(59, 130, 246, 0.1), transparent);
+  transition: left 0.5s ease;
+}
+
+.category-tab:hover::before {
+  left: 100%;
+}
+
+.category-tab:hover {
+  color: #3b82f6;
+  border-color: #93c5fd;
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(59, 130, 246, 0.1);
+}
+
+.category-tab.active {
+  color: #3b82f6;
+  background: #f0f9ff;
+  border-color: #3b82f6;
+  box-shadow: 0 4px 12px rgba(59, 130, 246, 0.15);
+  transform: translateY(-2px);
+}
+
+.category-tab.active::before {
+  background: linear-gradient(90deg, transparent, rgba(59, 130, 246, 0.2), transparent);
+}
+
+.category-content {
+  padding: 3.5rem 1.5rem 4rem;
+  position: relative;
+  background: linear-gradient(135deg, #f8fafc 0%, #ffffff 100%);
+}
+
+.fund-list {
+  display: flex;
+  flex-direction: column;
+  padding: 0;
+  max-height: 400px;
+  overflow-y: auto;
+  scrollbar-width: thin;
+  scrollbar-color: #94a3b8 #e2e8f0;
+}
+
+.fund-list::-webkit-scrollbar {
+  width: 8px;
+}
+
+.fund-list::-webkit-scrollbar-track {
+  background: #e2e8f0;
+  border-radius: 4px;
+}
+
+.fund-list::-webkit-scrollbar-thumb {
+  background: #94a3b8;
+  border-radius: 4px;
+}
+
+.fund-list::-webkit-scrollbar-thumb:hover {
+  background: #64748b;
+}
+
+.fund-item {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 2rem 1.5rem;
+  background: #ffffff;
+  border-radius: 1.25rem;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+  transition: box-shadow 0.3s ease, border-color 0.3s ease, background 0.3s ease;
+  cursor: pointer;
+  position: relative;
+  overflow: hidden;
+  border: 1px solid rgba(226, 232, 240, 0.5);
+  margin-bottom: 1.75rem;
+}
+
+.fund-item::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(90deg, transparent, rgba(59, 130, 246, 0.08), transparent);
+  transition: left 0.5s ease;
+  pointer-events: none;
+}
+
+.fund-item:hover::before {
+  left: 100%;
+}
+
+.fund-item:hover {
+  box-shadow: 0 8px 16px rgba(59, 130, 246, 0.15);
+  border-color: rgba(59, 130, 246, 0.3);
+  background: linear-gradient(135deg, #ffffff 0%, #f0f9ff 100%);
+  z-index: 10;
+}
+
+.fund-info {
+  flex: 1;
+}
+
+.fund-info h4 {
+  margin: 0 0 0.75rem 0;
+  font-size: 1.1rem;
+  font-weight: 600;
+  color: #1e293b;
+  line-height: 1.4;
+}
+
+.fund-info p {
+  margin: 0;
+  font-size: 0.95rem;
+  color: #64748b;
+  line-height: 1.4;
+}
+
+.fund-price {
+  font-size: 1.2rem;
+  font-weight: 700;
+  color: #1e293b;
+  padding: 0.5rem 1rem;
+  background: rgba(59, 130, 246, 0.05);
+  border-radius: 0.75rem;
+  border: 1px solid rgba(59, 130, 246, 0.1);
+  transition: all 0.3s ease;
+}
+
+.fund-item:hover .fund-price {
+  background: rgba(59, 130, 246, 0.1);
+  border-color: rgba(59, 130, 246, 0.2);
+  transform: scale(1.05);
+}
+
+/* 深色模式下的基金分类功能样式 */
+.app.dark-mode .fund-categories {
+  background: #1e293b;
+  border: 1px solid rgba(59, 130, 246, 0.3);
+  box-shadow: 0 20px 40px rgba(0, 0, 0, 0.3);
+}
+
+.app.dark-mode .fund-categories:hover {
+  box-shadow: 0 25px 50px rgba(0, 0, 0, 0.4);
+}
+
+.app.dark-mode .category-tabs {
+  background: linear-gradient(135deg, #1e293b 0%, #0f172a 100%);
+  border-color: #334155;
+}
+
+.app.dark-mode .category-tab {
+  color: #94a3b8;
+  border-color: #475569;
+  background: rgba(30, 41, 59, 0.5);
+}
+
+.app.dark-mode .category-tab:hover {
+  color: #e2e8f0;
+  background: rgba(59, 130, 246, 0.15);
+  border-color: #60a5fa;
+}
+
+.app.dark-mode .category-tab.active {
+  color: #60a5fa;
+  background: rgba(59, 130, 246, 0.2);
+  border-color: #3b82f6;
+  box-shadow: 0 4px 12px rgba(59, 130, 246, 0.2);
+}
+
+.app.dark-mode .category-content {
+  background: linear-gradient(135deg, #334155 0%, #1e293b 100%);
+}
+
+.app.dark-mode .fund-list {
+  scrollbar-color: #64748b #334155;
+}
+
+.app.dark-mode .fund-list::-webkit-scrollbar-track {
+  background: #334155;
+}
+
+.app.dark-mode .fund-list::-webkit-scrollbar-thumb {
+  background: #64748b;
+}
+
+.app.dark-mode .fund-list::-webkit-scrollbar-thumb:hover {
+  background: #94a3b8;
+}
+
+.app.dark-mode .fund-item {
+  background: #334155;
+  border: 1px solid rgba(59, 130, 246, 0.2);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+}
+
+.app.dark-mode .fund-item:hover {
+  background: linear-gradient(135deg, #475569 0%, #334155 100%);
+  border: 1px solid rgba(59, 130, 246, 0.4);
+  box-shadow: 0 12px 24px rgba(59, 130, 246, 0.25);
+}
+
+.app.dark-mode .fund-info h4 {
+  color: #f1f5f9;
+}
+
+.app.dark-mode .fund-info p {
+  color: #94a3b8;
+}
+
+.app.dark-mode .fund-price {
+  color: #f1f5f9;
+  background: rgba(59, 130, 246, 0.15);
+  border: 1px solid rgba(59, 130, 246, 0.3);
+}
+
+.app.dark-mode .fund-item:hover .fund-price {
+  background: rgba(59, 130, 246, 0.25);
+  border-color: rgba(59, 130, 246, 0.5);
+}
+
+/* 展开/收起按钮样式 */
+.view-all-button-container {
+  display: flex;
+  justify-content: center;
+  margin-top: 0.5rem;
+  padding-top: 1rem;
+  border-top: 1px solid rgba(226, 232, 240, 0.5);
+}
+
+.view-all-button {
+  background: none;
+  border: none;
+  color: #64748b;
+  font-size: 0.9rem;
+  font-weight: 500;
+  cursor: pointer;
+  padding: 0.5rem 1rem;
+  border-radius: 0.5rem;
+  transition: all 0.3s ease;
+}
+
+.view-all-button:hover {
+  color: #3b82f6;
+  background: rgba(59, 130, 246, 0.05);
+}
+
+/* 深色模式下的展开/收起按钮样式 */
+.app.dark-mode .view-all-button-container {
+  border-top-color: rgba(59, 130, 246, 0.2);
+}
+
+.app.dark-mode .view-all-button {
+  color: #94a3b8;
+}
+
+.app.dark-mode .view-all-button:hover {
+  color: #60a5fa;
+  background: rgba(59, 130, 246, 0.15);
 }
 
 .app.dark-mode .recommendation-text {
@@ -2177,11 +2887,22 @@ body {
 }
 
 .carousel-section h3 {
-  margin-top: 0;
-  margin-bottom: 2rem;
-  color: #334155;
-  font-size: 1.2rem;
+  margin: 0 0 1.5rem 0;
+  padding: 0.75rem 1rem;
+  background: linear-gradient(90deg, #10b981 0%, #34d399 100%);
+  color: white;
+  font-size: 1.1rem;
   font-weight: 600;
+  border-radius: 6px;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  box-shadow: 0 2px 4px rgba(16, 185, 129, 0.2);
+}
+
+.carousel-section h3::before {
+  content: '🏆';
+  font-size: 1.2rem;
 }
 
 .carousel-container {
@@ -2405,7 +3126,9 @@ body {
 }
 
 .app.dark-mode .carousel-section h3 {
-  color: #f1f5f9;
+  background: linear-gradient(90deg, #059669 0%, #10b981 100%);
+  color: white;
+  box-shadow: 0 2px 4px rgba(16, 185, 129, 0.3);
 }
 
 .app.dark-mode .rank-card {

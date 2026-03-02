@@ -26,12 +26,32 @@ function App() {
   // 资源管理模块显示/隐藏设置
   const [resourceSettings, setResourceSettings] = useState(() => {
     const saved = localStorage.getItem('resourceSettings');
-    return saved ? JSON.parse(saved) : {
+    const isNewUser = !localStorage.getItem('userAccountCreated');
+    const defaultSettings = {
       stockRecommendation: true,
       stockRanking: true,
       fundRecommendation: true,
-      fundRanking: true
+      fundRanking: true,
+      // 金属行业设置 - 默认都显示
+      metalGold: true,
+      metalSilver: true,
+      metalCopper: true,
+      metalPlatinum: true,
+      metalLead: true,
+      metalNickel: true,
+      metalRareEarth: true,
+      metalZirconium: true,
+      metalTungsten: true
     };
+    if (saved && !isNewUser) {
+      const parsed = JSON.parse(saved);
+      return parsed;
+    }
+    // 新用户或首次登录，设置金属行业默认都显示
+    if (isNewUser) {
+      localStorage.setItem('userAccountCreated', 'true');
+    }
+    return defaultSettings;
   });
   const [activeTab, setActiveTab] = useState('stock');
   const [activeNavTab, setActiveNavTab] = useState('stock');
@@ -42,7 +62,47 @@ function App() {
   const [darkMode, setDarkMode] = useState(false);
   const [recommendationCode, setRecommendationCode] = useState('');
   const [recommendationResult, setRecommendationResult] = useState('');
+  const [lastAnalyzedCode, setLastAnalyzedCode] = useState('');
+  const [lastAnalyzedType, setLastAnalyzedType] = useState('');
   const [isLoading, setIsLoading] = useState(false);
+  const [stockIndices, setStockIndices] = useState({
+    a股: {
+      name: 'A股',
+      price: '3,258.63',
+      change: '+0.86%',
+      isPositive: true
+    },
+    港股: {
+      name: '港股',
+      price: '15,876.78',
+      change: '+1.23%',
+      isPositive: true
+    },
+    上证: {
+      name: '上证',
+      price: '3,258.63',
+      change: '+0.86%',
+      isPositive: true
+    },
+    科创: {
+      name: '科创',
+      price: '958.32',
+      change: '-0.24%',
+      isPositive: false
+    },
+    纳斯达克: {
+      name: '纳斯达克',
+      price: '18,243.65',
+      change: '+0.52%',
+      isPositive: true
+    },
+    标普500: {
+      name: '标普500',
+      price: '5,132.18',
+      change: '+0.31%',
+      isPositive: true
+    }
+  });
   const [metalLoading, setMetalLoading] = useState(false);
 
   // 页面加载时滚动到顶部
@@ -53,24 +113,61 @@ function App() {
   // 金属页面自动加载数据
   useEffect(() => {
     const loadMetalData = async () => {
-      if (activeNavTab === 'metal' && !showDetail && !data && ['gold', 'silver', 'copper', 'platinum', 'lead'].includes(activeTab)) {
-        setMetalLoading(true);
-        try {
-          const response = await fetch(`http://localhost:3001/api/metal/${activeTab}`);
-          if (response.ok) {
-            const result = await response.json();
-            setData(result.data);
+      if (activeNavTab === 'metal' && !showDetail && !data) {
+        // 定义金属顺序
+        const metalOrder = ['gold', 'silver', 'copper', 'platinum', 'lead', 'nickel', 'rare-earth', 'zirconium', 'tungsten'];
+        
+        // 检查当前activeTab是否在metalOrder中
+        if (metalOrder.includes(activeTab)) {
+          // 检查当前金属是否被隐藏
+          const currentMetalKey = `metal${activeTab.charAt(0).toUpperCase() + activeTab.slice(1)}`;
+          if (!resourceSettings[currentMetalKey]) {
+            // 当前金属被隐藏，查找第一个可见的金属
+            const firstVisibleMetal = metalOrder.find(metal => {
+              const metalKey = `metal${metal.charAt(0).toUpperCase() + metal.slice(1)}`;
+              return resourceSettings[metalKey];
+            });
+            
+            if (firstVisibleMetal) {
+              // 找到可见的金属，切换到该金属
+              setActiveTab(firstVisibleMetal);
+              setCode(firstVisibleMetal);
+              setMetalLoading(true);
+              
+              try {
+                const response = await fetch(`http://localhost:3001/api/metal/${firstVisibleMetal}`);
+                if (response.ok) {
+                  const result = await response.json();
+                  setData(result.data);
+                }
+              } catch (error) {
+                console.error('加载金属数据失败:', error);
+              } finally {
+                setMetalLoading(false);
+              }
+            }
+            // 如果没有找到可见的金属，不加载任何数据
+          } else {
+            // 当前金属可见，加载数据
+            setMetalLoading(true);
+            try {
+              const response = await fetch(`http://localhost:3001/api/metal/${activeTab}`);
+              if (response.ok) {
+                const result = await response.json();
+                setData(result.data);
+              }
+            } catch (error) {
+              console.error('加载金属数据失败:', error);
+            } finally {
+              setMetalLoading(false);
+            }
           }
-        } catch (error) {
-          console.error('加载金属数据失败:', error);
-        } finally {
-          setMetalLoading(false);
         }
       }
     };
     
     loadMetalData();
-  }, [activeNavTab, activeTab, showDetail, data]);
+  }, [activeNavTab, activeTab, showDetail, data, resourceSettings]);
   
   // 退出登录确认弹窗状态
   const [showLogoutModal, setShowLogoutModal] = useState(false);
@@ -78,6 +175,8 @@ function App() {
   const [showLogoutToast, setShowLogoutToast] = useState(false);
   // 登录提示弹窗状态
   const [showLoginPrompt, setShowLoginPrompt] = useState(false);
+  // 基金分类标签状态
+  const [fundCategoryTab, setFundCategoryTab] = useState('hot');
   // 是否显示登录页面
   const [showLoginPage, setShowLoginPage] = useState(false);
 
@@ -87,7 +186,75 @@ function App() {
     setShowLoginPage(false);
     // 将登录状态保存到localStorage中
     localStorage.setItem('isLoggedIn', 'true');
+    // 检查是否是新用户
+    const isNewUser = !localStorage.getItem('userAccountCreated');
+    if (isNewUser) {
+      // 新用户，设置金属行业默认都显示
+      const defaultMetalSettings = {
+        metalGold: true,
+        metalSilver: true,
+        metalCopper: true,
+        metalPlatinum: true,
+        metalLead: true,
+        metalNickel: true,
+        metalRareEarth: true,
+        metalZirconium: true,
+        metalTungsten: true
+      };
+      const newSettings = {
+        ...resourceSettings,
+        ...defaultMetalSettings
+      };
+      setResourceSettings(newSettings);
+      localStorage.setItem('resourceSettings', JSON.stringify(newSettings));
+      localStorage.setItem('userAccountCreated', 'true');
+    }
   };
+
+  // 监听资源设置变化，处理金属类型切换
+  useEffect(() => {
+    // 当切换到金属行业页面时，确保有可见的金属类型被选中
+    if (activeNavTab === 'metal') {
+      const visibleMetals = [];
+      if (resourceSettings.metalGold) visibleMetals.push('gold');
+      if (resourceSettings.metalSilver) visibleMetals.push('silver');
+      if (resourceSettings.metalCopper) visibleMetals.push('copper');
+      if (resourceSettings.metalPlatinum) visibleMetals.push('platinum');
+      if (resourceSettings.metalLead) visibleMetals.push('lead');
+      if (resourceSettings.metalNickel) visibleMetals.push('nickel');
+      if (resourceSettings.metalRareEarth) visibleMetals.push('rare-earth');
+      if (resourceSettings.metalZirconium) visibleMetals.push('zirconium');
+      if (resourceSettings.metalTungsten) visibleMetals.push('tungsten');
+
+      // 如果当前选中的金属类型不可见，切换到第一个可见的金属类型
+      if (visibleMetals.length > 0 && !visibleMetals.includes(activeTab)) {
+        const firstVisibleMetal = visibleMetals[0];
+        setActiveTab(firstVisibleMetal);
+        setCode(firstVisibleMetal);
+        
+        // 加载第一个可见金属的数据
+        const loadFirstMetalData = async () => {
+          setMetalLoading(true);
+          try {
+            const response = await fetch(`http://localhost:3001/api/metal/${firstVisibleMetal}`);
+            if (response.ok) {
+              const result = await response.json();
+              setData(result.data);
+            } else {
+              const errorResult = await response.json();
+              alert(errorResult.error || '未找到该金属的数据');
+            }
+          } catch (error) {
+            console.error('搜索出错:', error);
+            alert('搜索失败，请稍后重试');
+          } finally {
+            setMetalLoading(false);
+          }
+        };
+        loadFirstMetalData();
+      }
+    }
+  }, [resourceSettings, activeNavTab, activeTab]);
   
   // 显示退出登录确认弹窗
   const handleShowLogoutModal = () => {
@@ -201,7 +368,17 @@ function App() {
     } else if (activeNavTab === 'fund') {
       setActiveTab('fund');
     } else if (activeNavTab === 'metal') {
-      setActiveTab('gold');
+      // 定义金属顺序
+      const metalOrder = ['gold', 'silver', 'copper', 'platinum', 'lead', 'nickel', 'rare-earth', 'zirconium', 'tungsten'];
+      // 查找第一个可见的金属
+      const firstVisibleMetal = metalOrder.find(metal => {
+        const metalKey = `metal${metal.charAt(0).toUpperCase() + metal.slice(1)}`;
+        return resourceSettings[metalKey];
+      });
+      // 如果找到可见的金属，设置为activeTab，否则设置为'gold'
+      if (firstVisibleMetal) {
+        setActiveTab(firstVisibleMetal);
+      }
     }
   };
 
@@ -236,6 +413,14 @@ function App() {
       return;
     }
 
+    // 检查是否已经有相同代码和类型的推荐结果
+    if (recommendationResult && 
+        lastAnalyzedCode === recommendationCode && 
+        lastAnalyzedType === activeTab) {
+      // 已经有相同的推荐结果，不再重新加载
+      return;
+    }
+
     setIsLoading(true);
     setRecommendationResult('');
 
@@ -251,6 +436,9 @@ function App() {
       if (response.ok) {
         const result = await response.json();
         setRecommendationResult(result.data.recommendation);
+        // 记录最后分析的代码和类型
+        setLastAnalyzedCode(recommendationCode);
+        setLastAnalyzedType(activeTab);
       } else {
         const errorResult = await response.json();
         alert(errorResult.error || '投资推荐失败');
@@ -259,9 +447,9 @@ function App() {
       console.error('投资推荐出错:', error);
       alert('投资推荐失败，请稍后重试');
     } finally {
-    setIsLoading(false);
-  }
-};
+      setIsLoading(false);
+    }
+  };
 
 
 
@@ -442,218 +630,296 @@ function App() {
 
 
                 {activeNavTab === 'metal' && (
-                  <div className="metal-selector-container">
+                  <div className="metal-selector-container" style={{ position: 'relative' }}>
                     <div className="tab-selector">
-                      <button 
-                        className={`tab-button ${activeTab === 'gold' ? 'active' : ''}`}
-                        data-metal="gold"
-                        onClick={async () => {
-                          if (activeTab === 'gold') return;
-                          
-                          const metalCode = 'gold';
-                          setActiveTab(metalCode);
-                          setCode(metalCode);
-                          setMetalLoading(true);
-                          
-                          try {
-                            const response = await fetch(`http://localhost:3001/api/metal/${metalCode}`);
-                            if (response.ok) {
-                              const result = await response.json();
-                              setData(result.data);
-                            } else {
-                              const errorResult = await response.json();
-                              alert(errorResult.error || '未找到该金属的数据');
+                      {resourceSettings.metalGold && (
+                        <button 
+                          className={`tab-button ${activeTab === 'gold' ? 'active' : ''}`}
+                          data-metal="gold"
+                          onClick={async () => {
+                            if (activeTab === 'gold') return;
+                            
+                            const metalCode = 'gold';
+                            setActiveTab(metalCode);
+                            setCode(metalCode);
+                            setMetalLoading(true);
+                            
+                            try {
+                              const response = await fetch(`http://localhost:3001/api/metal/${metalCode}`);
+                              if (response.ok) {
+                                const result = await response.json();
+                                setData(result.data);
+                              } else {
+                                const errorResult = await response.json();
+                                alert(errorResult.error || '未找到该金属的数据');
+                              }
+                            } catch (error) {
+                              console.error('搜索出错:', error);
+                              alert('搜索失败，请稍后重试');
+                            } finally {
+                              setMetalLoading(false);
                             }
-                          } catch (error) {
-                            console.error('搜索出错:', error);
-                            alert('搜索失败，请稍后重试');
-                          } finally {
-                            setMetalLoading(false);
-                          }
-                        }}
-                      >
-                        黄金
-                      </button>
-                      <button 
-                        className={`tab-button ${activeTab === 'silver' ? 'active' : ''}`}
-                        data-metal="silver"
-                        onClick={async () => {
-                          if (activeTab === 'silver') return;
-                          
-                          const metalCode = 'silver';
-                          setActiveTab(metalCode);
-                          setCode(metalCode);
-                          setMetalLoading(true);
-                          
-                          try {
-                            const response = await fetch(`http://localhost:3001/api/metal/${metalCode}`);
-                            if (response.ok) {
-                              const result = await response.json();
-                              setData(result.data);
-                            } else {
-                              const errorResult = await response.json();
-                              alert(errorResult.error || '未找到该金属的数据');
+                          }}
+                        >
+                          黄金
+                        </button>
+                      )}
+                      {resourceSettings.metalSilver && (
+                        <button 
+                          className={`tab-button ${activeTab === 'silver' ? 'active' : ''}`}
+                          data-metal="silver"
+                          onClick={async () => {
+                            if (activeTab === 'silver') return;
+                            
+                            const metalCode = 'silver';
+                            setActiveTab(metalCode);
+                            setCode(metalCode);
+                            setMetalLoading(true);
+                            
+                            try {
+                              const response = await fetch(`http://localhost:3001/api/metal/${metalCode}`);
+                              if (response.ok) {
+                                const result = await response.json();
+                                setData(result.data);
+                              } else {
+                                const errorResult = await response.json();
+                                alert(errorResult.error || '未找到该金属的数据');
+                              }
+                            } catch (error) {
+                              console.error('搜索出错:', error);
+                              alert('搜索失败，请稍后重试');
+                            } finally {
+                              setMetalLoading(false);
                             }
-                          } catch (error) {
-                            console.error('搜索出错:', error);
-                            alert('搜索失败，请稍后重试');
-                          } finally {
-                            setMetalLoading(false);
-                          }
-                        }}
-                      >
-                        白银
-                      </button>
-                      <button 
-                        className={`tab-button ${activeTab === 'copper' ? 'active' : ''}`}
-                        data-metal="copper"
-                        onClick={async () => {
-                          if (activeTab === 'copper') return;
-                          
-                          const metalCode = 'copper';
-                          setActiveTab(metalCode);
-                          setCode(metalCode);
-                          setMetalLoading(true);
-                          
-                          try {
-                            const response = await fetch(`http://localhost:3001/api/metal/${metalCode}`);
-                            if (response.ok) {
-                              const result = await response.json();
-                              setData(result.data);
-                            } else {
-                              const errorResult = await response.json();
-                              alert(errorResult.error || '未找到该金属的数据');
+                          }}
+                        >
+                          白银
+                        </button>
+                      )}
+                      {resourceSettings.metalCopper && (
+                        <button 
+                          className={`tab-button ${activeTab === 'copper' ? 'active' : ''}`}
+                          data-metal="copper"
+                          onClick={async () => {
+                            if (activeTab === 'copper') return;
+                            
+                            const metalCode = 'copper';
+                            setActiveTab(metalCode);
+                            setCode(metalCode);
+                            setMetalLoading(true);
+                            
+                            try {
+                              const response = await fetch(`http://localhost:3001/api/metal/${metalCode}`);
+                              if (response.ok) {
+                                const result = await response.json();
+                                setData(result.data);
+                              } else {
+                                const errorResult = await response.json();
+                                alert(errorResult.error || '未找到该金属的数据');
+                              }
+                            } catch (error) {
+                              console.error('搜索出错:', error);
+                              alert('搜索失败，请稍后重试');
+                            } finally {
+                              setMetalLoading(false);
                             }
-                          } catch (error) {
-                            console.error('搜索出错:', error);
-                            alert('搜索失败，请稍后重试');
-                          } finally {
-                            setMetalLoading(false);
-                          }
-                        }}
-                      >
-                        铜
-                      </button>
-                      <button 
-                        className={`tab-button ${activeTab === 'platinum' ? 'active' : ''}`}
-                        data-metal="platinum"
-                        onClick={async () => {
-                          if (activeTab === 'platinum') return;
-                          
-                          const metalCode = 'platinum';
-                          setActiveTab(metalCode);
-                          setCode(metalCode);
-                          setMetalLoading(true);
-                          
-                          try {
-                            const response = await fetch(`http://localhost:3001/api/metal/${metalCode}`);
-                            if (response.ok) {
-                              const result = await response.json();
-                              setData(result.data);
-                            } else {
-                              const errorResult = await response.json();
-                              alert(errorResult.error || '未找到该金属的数据');
+                          }}
+                        >
+                          铜
+                        </button>
+                      )}
+                      {resourceSettings.metalPlatinum && (
+                        <button 
+                          className={`tab-button ${activeTab === 'platinum' ? 'active' : ''}`}
+                          data-metal="platinum"
+                          onClick={async () => {
+                            if (activeTab === 'platinum') return;
+                            
+                            const metalCode = 'platinum';
+                            setActiveTab(metalCode);
+                            setCode(metalCode);
+                            setMetalLoading(true);
+                            
+                            try {
+                              const response = await fetch(`http://localhost:3001/api/metal/${metalCode}`);
+                              if (response.ok) {
+                                const result = await response.json();
+                                setData(result.data);
+                              } else {
+                                const errorResult = await response.json();
+                                alert(errorResult.error || '未找到该金属的数据');
+                              }
+                            } catch (error) {
+                              console.error('搜索出错:', error);
+                              alert('搜索失败，请稍后重试');
+                            } finally {
+                              setMetalLoading(false);
                             }
-                          } catch (error) {
-                            console.error('搜索出错:', error);
-                            alert('搜索失败，请稍后重试');
-                          } finally {
-                            setMetalLoading(false);
-                          }
-                        }}
-                      >
-                        铂
-                      </button>
-                      <button 
-                        className={`tab-button ${activeTab === 'lead' ? 'active' : ''}`}
-                        data-metal="lead"
-                        onClick={async () => {
-                          if (activeTab === 'lead') return;
-                          
-                          const metalCode = 'lead';
-                          setActiveTab(metalCode);
-                          setCode(metalCode);
-                          setMetalLoading(true);
-                          
-                          try {
-                            const response = await fetch(`http://localhost:3001/api/metal/${metalCode}`);
-                            if (response.ok) {
-                              const result = await response.json();
-                              setData(result.data);
-                            } else {
-                              const errorResult = await response.json();
-                              alert(errorResult.error || '未找到该金属的数据');
+                          }}
+                        >
+                          铂
+                        </button>
+                      )}
+                      {resourceSettings.metalLead && (
+                        <button 
+                          className={`tab-button ${activeTab === 'lead' ? 'active' : ''}`}
+                          data-metal="lead"
+                          onClick={async () => {
+                            if (activeTab === 'lead') return;
+                            
+                            const metalCode = 'lead';
+                            setActiveTab(metalCode);
+                            setCode(metalCode);
+                            setMetalLoading(true);
+                            
+                            try {
+                              const response = await fetch(`http://localhost:3001/api/metal/${metalCode}`);
+                              if (response.ok) {
+                                const result = await response.json();
+                                setData(result.data);
+                              } else {
+                                const errorResult = await response.json();
+                                alert(errorResult.error || '未找到该金属的数据');
+                              }
+                            } catch (error) {
+                              console.error('搜索出错:', error);
+                              alert('搜索失败，请稍后重试');
+                            } finally {
+                              setMetalLoading(false);
                             }
-                          } catch (error) {
-                            console.error('搜索出错:', error);
-                            alert('搜索失败，请稍后重试');
-                          } finally {
-                            setMetalLoading(false);
-                          }
-                        }}
-                      >
-                        铅
-                      </button>
-                      <button 
-                        className={`tab-button ${activeTab === 'nickel' ? 'active' : ''}`}
-                        data-metal="nickel"
-                        onClick={async () => {
-                          if (activeTab === 'nickel') return;
-                          
-                          const metalCode = 'nickel';
-                          setActiveTab(metalCode);
-                          setCode(metalCode);
-                          setMetalLoading(true);
-                          
-                          try {
-                            const response = await fetch(`http://localhost:3001/api/metal/${metalCode}`);
-                            if (response.ok) {
-                              const result = await response.json();
-                              setData(result.data);
-                            } else {
-                              const errorResult = await response.json();
-                              alert(errorResult.error || '未找到该金属的数据');
+                          }}
+                        >
+                          铅
+                        </button>
+                      )}
+                      {resourceSettings.metalNickel && (
+                        <button 
+                          className={`tab-button ${activeTab === 'nickel' ? 'active' : ''}`}
+                          data-metal="nickel"
+                          onClick={async () => {
+                            if (activeTab === 'nickel') return;
+                            
+                            const metalCode = 'nickel';
+                            setActiveTab(metalCode);
+                            setCode(metalCode);
+                            setMetalLoading(true);
+                            
+                            try {
+                              const response = await fetch(`http://localhost:3001/api/metal/${metalCode}`);
+                              if (response.ok) {
+                                const result = await response.json();
+                                setData(result.data);
+                              } else {
+                                const errorResult = await response.json();
+                                alert(errorResult.error || '未找到该金属的数据');
+                              }
+                            } catch (error) {
+                              console.error('搜索出错:', error);
+                              alert('搜索失败，请稍后重试');
+                            } finally {
+                              setMetalLoading(false);
                             }
-                          } catch (error) {
-                            console.error('搜索出错:', error);
-                            alert('搜索失败，请稍后重试');
-                          } finally {
-                            setMetalLoading(false);
-                          }
-                        }}
-                      >
-                        镍
-                      </button>
-                      <button 
-                        className={`tab-button ${activeTab === 'rare-earth' ? 'active' : ''}`}
-                        data-metal="rare-earth"
-                        onClick={async () => {
-                          if (activeTab === 'rare-earth') return;
-                          
-                          const metalCode = 'rare-earth';
-                          setActiveTab(metalCode);
-                          setCode(metalCode);
-                          setMetalLoading(true);
-                          
-                          try {
-                            const response = await fetch(`http://localhost:3001/api/metal/${metalCode}`);
-                            if (response.ok) {
-                              const result = await response.json();
-                              setData(result.data);
-                            } else {
-                              const errorResult = await response.json();
-                              alert(errorResult.error || '未找到该金属的数据');
+                          }}
+                        >
+                          镍
+                        </button>
+                      )}
+                      {resourceSettings.metalRareEarth && (
+                        <button 
+                          className={`tab-button ${activeTab === 'rare-earth' ? 'active' : ''}`}
+                          data-metal="rare-earth"
+                          onClick={async () => {
+                            if (activeTab === 'rare-earth') return;
+                            
+                            const metalCode = 'rare-earth';
+                            setActiveTab(metalCode);
+                            setCode(metalCode);
+                            setMetalLoading(true);
+                            
+                            try {
+                              const response = await fetch(`http://localhost:3001/api/metal/${metalCode}`);
+                              if (response.ok) {
+                                const result = await response.json();
+                                setData(result.data);
+                              } else {
+                                const errorResult = await response.json();
+                                alert(errorResult.error || '未找到该金属的数据');
+                              }
+                            } catch (error) {
+                              console.error('搜索出错:', error);
+                              alert('搜索失败，请稍后重试');
+                            } finally {
+                              setMetalLoading(false);
                             }
-                          } catch (error) {
-                            console.error('搜索出错:', error);
-                            alert('搜索失败，请稍后重试');
-                          } finally {
-                            setMetalLoading(false);
-                          }
-                        }}
-                      >
-                        稀土
-                      </button>
+                          }}
+                        >
+                          稀土
+                        </button>
+                      )}
+                      {resourceSettings.metalZirconium && (
+                        <button 
+                          className={`tab-button ${activeTab === 'zirconium' ? 'active' : ''}`}
+                          data-metal="zirconium"
+                          onClick={async () => {
+                            if (activeTab === 'zirconium') return;
+                            
+                            const metalCode = 'zirconium';
+                            setActiveTab(metalCode);
+                            setCode(metalCode);
+                            setMetalLoading(true);
+                            
+                            try {
+                              const response = await fetch(`http://localhost:3001/api/metal/${metalCode}`);
+                              if (response.ok) {
+                                const result = await response.json();
+                                setData(result.data);
+                              } else {
+                                const errorResult = await response.json();
+                                alert(errorResult.error || '未找到该金属的数据');
+                              }
+                            } catch (error) {
+                              console.error('搜索出错:', error);
+                              alert('搜索失败，请稍后重试');
+                            } finally {
+                              setMetalLoading(false);
+                            }
+                          }}
+                        >
+                          锆
+                        </button>
+                      )}
+                      {resourceSettings.metalTungsten && (
+                        <button 
+                          className={`tab-button ${activeTab === 'tungsten' ? 'active' : ''}`}
+                          data-metal="tungsten"
+                          onClick={async () => {
+                            if (activeTab === 'tungsten') return;
+                            
+                            const metalCode = 'tungsten';
+                            setActiveTab(metalCode);
+                            setCode(metalCode);
+                            setMetalLoading(true);
+                            
+                            try {
+                              const response = await fetch(`http://localhost:3001/api/metal/${metalCode}`);
+                              if (response.ok) {
+                                const result = await response.json();
+                                setData(result.data);
+                              } else {
+                                const errorResult = await response.json();
+                                alert(errorResult.error || '未找到该金属的数据');
+                              }
+                            } catch (error) {
+                              console.error('搜索出错:', error);
+                              alert('搜索失败，请稍后重试');
+                            } finally {
+                              setMetalLoading(false);
+                            }
+                          }}
+                        >
+                          钨
+                        </button>
+                      )}
                     </div>
                     
                     {/* 贵金属加载指示器 */}
@@ -663,6 +929,34 @@ function App() {
                         <span>加载中...</span>
                       </div>
                     )}
+                    
+                    {/* 所有金属都被隐藏时的提示 */}
+                    {!resourceSettings.metalGold && 
+                     !resourceSettings.metalSilver && 
+                     !resourceSettings.metalCopper && 
+                     !resourceSettings.metalPlatinum && 
+                     !resourceSettings.metalLead && 
+                     !resourceSettings.metalNickel && 
+                     !resourceSettings.metalRareEarth && 
+                     !resourceSettings.metalZirconium && 
+                     !resourceSettings.metalTungsten && (
+                      <div className="metal-hidden-message">
+                        <div className="message-icon">�</div>
+                        <h3>暂无显示的金属数据</h3>
+                        <p>您已在设置中隐藏了所有金属数据。如需查看，请前往"设置-资源管理"中开启需要查看的金属。</p>
+                        <button 
+                          className="settings-button"
+                          onClick={() => {
+                            setActiveNavTab('settings');
+                            window.scrollTo({ top: 0, behavior: 'auto' });
+                          }}
+                        >
+                          前往设置
+                        </button>
+                      </div>
+                    )}
+                    
+
                   </div>
                 )}
 
@@ -686,32 +980,252 @@ function App() {
 
                     <div className="example-codes">
                       <h3>示例代码：</h3>
-                      {activeTab === 'stock' ? (
-                        <div>
-                          <span className="example-code" onClick={() => setCode('000001')}>000001（平安银行）</span>
-                          <span className="example-code" onClick={() => setCode('600519')}>600519（贵州茅台）</span>
-                        </div>
-                      ) : (
-                        <div>
-                          <span className="example-code" onClick={() => setCode('110022')}>110022（易方达消费行业股票）</span>
-                          <span className="example-code" onClick={() => setCode('000001')}>000001（华夏成长混合）</span>
-                        </div>
+                      {activeTab === 'stock' && (
+                        <span className="example-code" onClick={() => setCode('000001')}>000001（平安银行）</span>
+                      )}
+                      {activeTab === 'fund' && (
+                        <span className="example-code" onClick={() => setCode('110022')}>110022（易方达消费行业股票）</span>
                       )}
                     </div>
+
+                    {/* 基金分类功能 */}
+                    {activeNavTab === 'fund' && (
+                      <div className="fund-categories">
+                        <div className="category-tabs">
+                          <button 
+                            className={`category-tab ${fundCategoryTab === 'hot' ? 'active' : ''}`}
+                            onClick={() => {
+                              setFundCategoryTab('hot');
+                              // 重置滚动条位置
+                              setTimeout(() => {
+                                const fundList = document.querySelector('.fund-list');
+                                if (fundList) {
+                                  fundList.scrollTop = 0;
+                                }
+                              }, 0);
+                            }}
+                          >
+                            热门基金
+                          </button>
+                          <button 
+                            className={`category-tab ${fundCategoryTab === 'hold' ? 'active' : ''}`}
+                            onClick={() => {
+                              setFundCategoryTab('hold');
+                              // 重置滚动条位置
+                              setTimeout(() => {
+                                const fundList = document.querySelector('.fund-list');
+                                if (fundList) {
+                                  fundList.scrollTop = 0;
+                                }
+                              }, 0);
+                            }}
+                          >
+                            持有基金
+                          </button>
+                          <button 
+                            className={`category-tab ${fundCategoryTab === 'watch' ? 'active' : ''}`}
+                            onClick={() => {
+                              setFundCategoryTab('watch');
+                              // 重置滚动条位置
+                              setTimeout(() => {
+                                const fundList = document.querySelector('.fund-list');
+                                if (fundList) {
+                                  fundList.scrollTop = 0;
+                                }
+                              }, 0);
+                            }}
+                          >
+                            自选基金
+                          </button>
+                        </div>
+                        <div className="category-content">
+                          <div className="fund-list">
+                            {/* 热门基金列表 */}
+                            {fundCategoryTab === 'hot' && (
+                              <>
+                                <div className="fund-item">
+                                  <div className="fund-info">
+                                    <h4>易方达消费行业股票 (110022)</h4>
+                                    <p>年涨幅: +25.3%</p>
+                                  </div>
+                                  <div className="fund-price">3.256 元</div>
+                                </div>
+                                <div className="fund-item">
+                                  <div className="fund-info">
+                                    <h4>华夏成长混合 (000001)</h4>
+                                    <p>年涨幅: +12.6%</p>
+                                  </div>
+                                  <div className="fund-price">2.156 元</div>
+                                </div>
+                                <div className="fund-item">
+                                  <div className="fund-info">
+                                    <h4>易方达国防军工混合 (001475)</h4>
+                                    <p>年涨幅: +19.8%</p>
+                                  </div>
+                                  <div className="fund-price">1.856 元</div>
+                                </div>
+                                <div className="fund-item">
+                                  <div className="fund-info">
+                                    <h4>广发双擎升级混合A (005911)</h4>
+                                    <p>年涨幅: +31.2%</p>
+                                  </div>
+                                  <div className="fund-price">2.134 元</div>
+                                </div>
+                                <div className="fund-item">
+                                  <div className="fund-info">
+                                    <h4>诺安成长混合 (320007)</h4>
+                                    <p>年涨幅: +18.5%</p>
+                                  </div>
+                                  <div className="fund-price">1.678 元</div>
+                                </div>
+                              </>
+                            )}
+                            {/* 持有基金列表 */}
+                            {fundCategoryTab === 'hold' && (
+                              <>
+                                <div className="fund-item">
+                                  <div className="fund-info">
+                                    <h4>广发稳健增长混合 (270002)</h4>
+                                    <p>持有份额: 5,000份 | 收益率: +8.5%</p>
+                                  </div>
+                                  <div className="fund-price">1.892 元</div>
+                                </div>
+                                <div className="fund-item">
+                                  <div className="fund-info">
+                                    <h4>嘉实沪深300指数 (160706)</h4>
+                                    <p>持有份额: 3,200份 | 收益率: +15.2%</p>
+                                  </div>
+                                  <div className="fund-price">1.456 元</div>
+                                </div>
+                                <div className="fund-item">
+                                  <div className="fund-info">
+                                    <h4>南方中证500ETF联接 (160119)</h4>
+                                    <p>持有份额: 2,800份 | 收益率: +6.8%</p>
+                                  </div>
+                                  <div className="fund-price">1.234 元</div>
+                                </div>
+                                <div className="fund-item">
+                                  <div className="fund-info">
+                                    <h4>富国天惠成长混合 (161005)</h4>
+                                    <p>持有份额: 1,500份 | 收益率: +22.1%</p>
+                                  </div>
+                                  <div className="fund-price">2.678 元</div>
+                                </div>
+                                <div className="fund-item">
+                                  <div className="fund-info">
+                                    <h4>兴全合润混合 (163406)</h4>
+                                    <p>持有份额: 2,000份 | 收益率: +11.3%</p>
+                                  </div>
+                                  <div className="fund-price">1.856 元</div>
+                                </div>
+                                <div className="fund-item">
+                                  <div className="fund-info">
+                                    <h4>交银新成长混合 (519736)</h4>
+                                    <p>持有份额: 1,800份 | 收益率: +14.7%</p>
+                                  </div>
+                                  <div className="fund-price">2.345 元</div>
+                                </div>
+                              </>
+                            )}
+                            {/* 自选基金列表 */}
+                            {fundCategoryTab === 'watch' && (
+                              <>
+                                <div className="fund-item">
+                                  <div className="fund-info">
+                                    <h4>中欧医疗健康混合A (003095)</h4>
+                                    <p>日涨幅: +1.2% | 关注价格: 2.156元</p>
+                                  </div>
+                                  <div className="fund-price">2.189 元</div>
+                                </div>
+                                <div className="fund-item">
+                                  <div className="fund-info">
+                                    <h4>招商中证白酒指数 (161725)</h4>
+                                    <p>日涨幅: -0.5% | 关注价格: 1.023元</p>
+                                  </div>
+                                  <div className="fund-price">1.018 元</div>
+                                </div>
+                                <div className="fund-item">
+                                  <div className="fund-info">
+                                    <h4>汇添富消费行业混合 (000083)</h4>
+                                    <p>日涨幅: +0.8% | 关注价格: 3.456元</p>
+                                  </div>
+                                  <div className="fund-price">3.482 元</div>
+                                </div>
+                                <div className="fund-item">
+                                  <div className="fund-info">
+                                    <h4>工银瑞信前沿医疗股票A (001717)</h4>
+                                    <p>日涨幅: +2.1% | 关注价格: 2.789元</p>
+                                  </div>
+                                  <div className="fund-price">2.845 元</div>
+                                </div>
+                                <div className="fund-item">
+                                  <div className="fund-info">
+                                    <h4>景顺长城新兴成长混合 (260108)</h4>
+                                    <p>日涨幅: +0.3% | 关注价格: 2.234元</p>
+                                  </div>
+                                  <div className="fund-price">2.241 元</div>
+                                </div>
+                                <div className="fund-item">
+                                  <div className="fund-info">
+                                    <h4>华安媒体互联网混合A (001071)</h4>
+                                    <p>日涨幅: +1.5% | 关注价格: 1.567元</p>
+                                  </div>
+                                  <div className="fund-price">1.589 元</div>
+                                </div>
+                                <div className="fund-item">
+                                  <div className="fund-info">
+                                    <h4>鹏华新兴产业混合 (206009)</h4>
+                                    <p>日涨幅: -0.2% | 关注价格: 2.123元</p>
+                                  </div>
+                                  <div className="fund-price">2.118 元</div>
+                                </div>
+                              </>
+                            )}
+                          </div>
+
+                        </div>
+                      </div>
+                    )}
+
+                    {/* 股市实时状态数据 */}
+                    {activeNavTab === 'stock' && (
+                      <div className="stock-indices-container">
+                        {Object.values(stockIndices).map((index, idx) => (
+                          <div key={idx} className="stock-index-card">
+                            <div className="index-name">{index.name}</div>
+                            <div className="index-price">{index.price} 点</div>
+                            <div className={`index-change ${index.isPositive ? 'positive' : 'negative'}`}>
+                              {index.change}
+                            </div>
+                          </div>
+                        ))}
+                      </div>
+                    )}
 
                     {/* 投资推荐功能 */}
                     {((activeNavTab === 'stock' && resourceSettings.stockRecommendation) ||
                       (activeNavTab === 'fund' && resourceSettings.fundRecommendation)) && (
                     <div className="investment-recommendation">
-                      <h3>投资推荐</h3>
                       <div className="recommendation-input">
                         <input
                           type="text"
                           className="recommendation-code-input"
                           placeholder={activeTab === 'stock' ? '请输入股票代码，例如：000001' : '请输入基金代码，例如：110022'}
                           value={recommendationCode}
-                          onChange={(e) => setRecommendationCode(e.target.value)}
+                          onChange={(e) => {
+                            const value = e.target.value;
+                            setRecommendationCode(value);
+                            // 当输入框内容变化时，重置最后分析的代码状态
+                            setLastAnalyzedCode('');
+                            setLastAnalyzedType('');
+                            // 当输入框内容被清除时，清空推荐结果
+                            if (!value.trim()) {
+                              setRecommendationResult(null);
+                            }
+                          }}
                         />
+                      </div>
+                      <div className="recommendation-button-container">
                         <button
                           className="recommendation-button"
                           onClick={handleInvestmentRecommendation}
@@ -1276,20 +1790,34 @@ function App() {
                 )}
 
                 {/* 贵金属数据显示 */}
-                {activeNavTab === 'metal' && ['gold', 'silver', 'copper', 'platinum', 'lead', 'nickel', 'rare-earth'].includes(activeTab) && (
-                  <div className="metal-detail-container" style={{ position: 'relative' }}>
-                    {data ? (
-                      <MetalDetail data={data} isLoggedIn={isLoggedIn} onLogin={() => setShowLoginPage(true)} />
-                    ) : (
-                      <div className="metal-detail-placeholder">
-                        <div className="placeholder-content">
-                          <div className="placeholder-title"></div>
-                          <div className="placeholder-info"></div>
-                          <div className="placeholder-chart"></div>
+                {activeNavTab === 'metal' && ['gold', 'silver', 'copper', 'platinum', 'lead', 'nickel', 'rare-earth', 'zirconium', 'tungsten'].includes(activeTab) && (
+                  (() => {
+                    // 处理特殊情况，如rare-earth转换为RareEarth
+                    let currentMetalKey;
+                    if (activeTab === 'rare-earth') {
+                      currentMetalKey = 'metalRareEarth';
+                    } else {
+                      currentMetalKey = `metal${activeTab.charAt(0).toUpperCase() + activeTab.slice(1)}`;
+                    }
+                    if (resourceSettings[currentMetalKey]) {
+                      return (
+                        <div className="metal-detail-container" style={{ position: 'relative' }}>
+                          {data ? (
+                            <MetalDetail data={data} isLoggedIn={isLoggedIn} onLogin={() => setShowLoginPage(true)} />
+                          ) : (
+                            <div className="metal-detail-placeholder">
+                              <div className="placeholder-content">
+                                <div className="placeholder-title"></div>
+                                <div className="placeholder-info"></div>
+                                <div className="placeholder-chart"></div>
+                              </div>
+                            </div>
+                          )}
                         </div>
-                      </div>
-                    )}
-                  </div>
+                      );
+                    }
+                    return null;
+                  })()
                 )}
 
               </div>
@@ -1309,7 +1837,7 @@ function App() {
                       <FundDetail data={data} advice={advice} />
                     )}
                     
-                    {(activeTab === 'gold' || activeTab === 'silver' || activeTab === 'copper' || activeTab === 'platinum' || activeTab === 'lead' || activeTab === 'nickel' || activeTab === 'rare-earth') && data && (
+                    {(activeTab === 'gold' || activeTab === 'silver' || activeTab === 'copper' || activeTab === 'platinum' || activeTab === 'lead' || activeTab === 'nickel' || activeTab === 'rare-earth' || activeTab === 'zirconium' || activeTab === 'tungsten') && data && (
                       <MetalDetail data={data} isLoggedIn={isLoggedIn} onLogin={() => setShowLoginPage(true)} />
                     )}
                   </div>
@@ -1319,8 +1847,9 @@ function App() {
             
             {/* 市场资讯页面 */}
             {activeNavTab === 'news' && (
-              <div className="news-page-wrapper" style={{ position: 'relative' }}>
+              <div className="news-page-wrapper" style={{ position: 'relative', minHeight: '300px' }}>
                 <MarketNews isLoggedIn={isLoggedIn} onLogin={() => setShowLoginPage(true)} />
+
               </div>
             )}
 
@@ -1335,6 +1864,8 @@ function App() {
                 setLanguage={setLanguage}
                 resourceSettings={resourceSettings}
                 setResourceSettings={setResourceSettings}
+                isLoggedIn={isLoggedIn}
+                onLogin={() => setShowLoginPage(true)}
               />
             )}
           </main>

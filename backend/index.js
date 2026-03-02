@@ -1182,12 +1182,35 @@ const metalData = {
     unit: '元/吨',
     description: '稀土是一组重要的战略资源，具有独特的物理化学性质，广泛应用于新能源、电子信息、航空航天等高新技术领域。稀土价格受全球科技发展需求、地缘政治因素、环保政策等多种因素影响。',
     history: generateMetalHistory(300000, 2022, 2026, 0.12)
+  },
+  'zirconium': {
+    name: '锆',
+    code: 'zirconium',
+    price: 185000.00,
+    change: 2300.00,
+    changePercent: 1.26,
+    unit: '元/吨',
+    description: '锆是一种重要的稀有金属，具有高强度、耐腐蚀性和耐高温性能，广泛应用于核工业、航空航天、化工等领域。',
+    history: generateMetalHistory(150000, 2022, 2026, 0.08)
+  },
+  'tungsten': {
+    name: '钨',
+    code: 'tungsten',
+    price: 220000.00,
+    change: 3100.00,
+    changePercent: 1.43,
+    unit: '元/吨',
+    description: '钨是一种重要的稀有金属，具有高熔点、高强度和高密度，广泛应用于硬质合金、刀具、电子、航空航天等领域。',
+    history: generateMetalHistory(180000, 2022, 2026, 0.1)
   }
 };
 
 // 获取金属价格数据
 app.get('/api/metal/:code', (req, res) => {
   const code = req.params.code;
+  console.log('Received metal code:', code);
+  console.log('Available metals:', Object.keys(metalData));
+  console.log('Has zirconium:', 'zirconium' in metalData);
   if (metalData[code]) {
     res.json({
       success: true,
@@ -2038,6 +2061,36 @@ function generatePortfolioRecommendation(type, relatedInfo) {
 // 市场资讯数据
 const newsData = [
   {
+    id: 'news_202502101650_051',
+    timestamp: '2025-02-10T16:50:00+08:00',
+    time_display: '16:50',
+    category: 'international',
+    category_name: '国际速报',
+    is_important: true,
+    importance_level: 5,
+    source: '路透社',
+    title: '美国宣布对伊朗实施新一轮制裁',
+    summary: '美国财政部宣布对伊朗多个实体和个人实施新一轮制裁，理由是伊朗支持恐怖主义活动和发展弹道导弹。',
+    content: '美国财政部宣布对伊朗多个实体和个人实施新一轮制裁，理由是伊朗支持恐怖主义活动和发展弹道导弹。此次制裁将冻结相关实体和个人在美国的资产，并禁止美国公民与其进行交易。',
+    related_stocks: ['石油板块', '黄金概念'],
+    tags: ['美国', '伊朗', '制裁']
+  },
+  {
+    id: 'news_202502101645_052',
+    timestamp: '2025-02-10T16:45:00+08:00',
+    time_display: '16:45',
+    category: 'international',
+    category_name: '国际速报',
+    is_important: true,
+    importance_level: 4,
+    source: 'BBC新闻',
+    title: '乌克兰与俄罗斯在顿巴斯地区冲突升级',
+    summary: '乌克兰与俄罗斯在顿巴斯地区的冲突近期再次升级，双方均报告有人员伤亡，国际社会呼吁停火。',
+    content: '乌克兰与俄罗斯在顿巴斯地区的冲突近期再次升级，双方均报告有人员伤亡。乌克兰军队称俄罗斯支持的 separatists 发动了多次袭击，而俄方则指责乌克兰违反停火协议。国际社会呼吁双方立即停火，通过外交途径解决争端。',
+    related_stocks: ['黄金概念', '军工板块'],
+    tags: ['乌克兰', '俄罗斯', '冲突']
+  },
+  {
     id: 'news_202502101643_001',
     timestamp: '2025-02-10T16:43:00+08:00',
     time_display: '16:43',
@@ -2413,6 +2466,36 @@ const newsData = [
     tags: ['医药', '创新药']
   },
   {
+    id: 'news_202502111500_053',
+    timestamp: '2025-02-11T15:00:00+08:00',
+    time_display: '15:00',
+    category: 'international',
+    category_name: '国际速报',
+    is_important: true,
+    importance_level: 5,
+    source: '彭博社',
+    title: '美联储主席鲍威尔表示将维持高利率政策',
+    summary: '美联储主席鲍威尔在国会听证会上表示，由于通胀压力仍然存在，美联储将维持当前的高利率政策不变。',
+    content: '美联储主席鲍威尔在国会听证会上表示，由于通胀压力仍然存在，美联储将维持当前的高利率政策不变。他强调，在通胀率回到2%的目标之前，美联储不会考虑降息。市场对此反应谨慎，美股出现小幅下跌。',
+    related_stocks: ['美股', '美元'],
+    tags: ['美联储', '利率', '美国']
+  },
+  {
+    id: 'news_202502111445_054',
+    timestamp: '2025-02-11T14:45:00+08:00',
+    time_display: '14:45',
+    category: 'international',
+    category_name: '国际速报',
+    is_important: false,
+    importance_level: 3,
+    source: '法新社',
+    title: '欧盟宣布对俄罗斯实施新的经济制裁',
+    summary: '欧盟委员会宣布对俄罗斯实施新一轮经济制裁，包括限制俄罗斯能源出口和金融交易。',
+    content: '欧盟委员会宣布对俄罗斯实施新一轮经济制裁，包括限制俄罗斯能源出口和金融交易。这是自俄乌冲突以来欧盟实施的第十轮制裁，旨在进一步向俄罗斯施压，迫使其停止军事行动。',
+    related_stocks: ['能源板块', '欧元'],
+    tags: ['欧盟', '俄罗斯', '制裁']
+  },
+  {
     id: 'news_202502111430_026',
     timestamp: '2025-02-11T14:30:00+08:00',
     time_display: '14:30',
@@ -2715,6 +2798,36 @@ const newsData = [
     tags: ['港交所', '互联互通', '标的扩容']
   },
   // 2月12日资讯
+  {
+    id: 'news_202502121530_055',
+    timestamp: '2025-02-12T15:30:00+08:00',
+    time_display: '15:30',
+    category: 'international',
+    category_name: '国际速报',
+    is_important: true,
+    importance_level: 4,
+    source: '路透社',
+    title: '以色列与哈马斯达成临时停火协议',
+    summary: '在国际社会的斡旋下，以色列与哈马斯达成临时停火协议，双方同意停火72小时。',
+    content: '在国际社会的斡旋下，以色列与哈马斯达成临时停火协议，双方同意停火72小时。根据协议，双方将停止一切军事行动，并允许人道主义援助进入加沙地带。这是自冲突爆发以来首次达成的停火协议，为和平谈判创造了条件。',
+    related_stocks: ['黄金概念', '石油板块'],
+    tags: ['以色列', '哈马斯', '停火']
+  },
+  {
+    id: 'news_202502121130_056',
+    timestamp: '2025-02-12T11:30:00+08:00',
+    time_display: '11:30',
+    category: 'international',
+    category_name: '国际速报',
+    is_important: false,
+    importance_level: 3,
+    source: '华尔街日报',
+    title: '日本央行暗示可能在年内结束负利率政策',
+    summary: '日本央行行长表示，随着通胀率逐步接近2%的目标，日本央行可能在年内结束负利率政策。',
+    content: '日本央行行长表示，随着通胀率逐步接近2%的目标，日本央行可能在年内结束负利率政策。这是日本央行首次明确暗示可能结束实施了多年的超宽松货币政策，市场对此反应积极，日元汇率出现上涨。',
+    related_stocks: ['日元', '日股'],
+    tags: ['日本央行', '利率', '日本']
+  },
   {
     id: 'news_202502121030_046',
     timestamp: '2025-02-12T10:30:00+08:00',

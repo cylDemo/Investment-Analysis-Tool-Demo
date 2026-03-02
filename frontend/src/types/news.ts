@@ -1,5 +1,5 @@
 // 资讯分类类型
-export type NewsCategory = 'stock' | 'fund' | 'metal' | 'policy' | 'exchange' | 'company' | 'industry';
+export type NewsCategory = 'stock' | 'fund' | 'metal' | 'policy' | 'exchange' | 'company' | 'industry' | 'international';
 
 // 资讯数据模型
 export interface NewsItem {
@@ -84,5 +84,11 @@ export const CATEGORY_CONFIG: Record<NewsCategory, CategoryConfig> = {
     name: '行业',
     color: '#13C2C2',
     bgColor: '#E6FFFB'
+  },
+  international: {
+    key: 'international',
+    name: '国际速报',
+    color: '#FA541C',
+    bgColor: '#FFF1E6'
   }
 };
